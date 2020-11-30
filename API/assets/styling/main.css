@@ -1,0 +1,172 @@
+/* 
+ * ===========================================================================
+ * Index 
+ * ===========================================================================
+ *
+ *
+ * Variabels
+ * Basic page styling
+ * Forms
+ * Buttons
+ * Login
+ * Index
+ * Grid
+ */
+
+/* 
+ * ===========================================================================
+ * Variabels 
+ * ===========================================================================
+ */
+:root {
+    /* Main colors */
+    --mainColor: #27e8a7;
+    --mainBackground: #232937;
+    --mainTextColor: #e4f0fb;
+    /* Secondary colors */
+    --secondaryColor: #32ae85;
+    --secondaryBackground: #506477;
+    --secondaryTextColor: #add7ff;
+    /* Tertiary colors */
+    --tertiaryColor: #42675a;
+    --tertiaryBackground: #7390aa;
+    --tertiaryTextColor: #91b4d5;
+    /* Standout colors */
+    --standout: #df4576;
+
+    /* Fonts */
+    --mainFont: "Roboto", sans-serif;
+    --secondaryFont: "Roboto Mono", monospace;
+}
+
+/* 
+ * ===========================================================================
+ * Basic page styling 
+ * ===========================================================================
+ */
+html, body {
+    position: relative;
+    height: auto;
+    max-height: 100%;
+    width: 100%;
+    font-size: 1em;
+    font-family: var(--mainFont);
+    color: var(--mainTextColor);
+    background-color: var(--mainBackground);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+  
+/* Selection styling */
+::-moz-selection {
+    color: var(--mainTextColor);
+    background-color: var(--standout);
+}
+::selection {
+    color: var(--mainTextColor);
+    background-color: var(--standout);
+}
+
+/* 
+ * ===========================================================================
+ * Forms
+ * ===========================================================================
+ */
+/* Form input */
+.form-control,
+.form-control:focus,
+.form-control:focus-within {
+    color: var(--mainTextColor);
+    background-color: var(--secondaryBackground);
+    border-color: var(--tertiaryBackground);
+}
+
+/* Form feedback */
+.form__feedback {
+    display: block;
+    height: 1.2rem;
+    margin: 0.5rem 0 1rem;
+    color: var(--standout);
+    font-size: 0.8rem;
+}
+
+/* Form input feedback good */
+.input--good {
+    border-color: var(--mainColor);
+}
+
+/* Form input feedback bad */
+.input--bad {
+    border-color: var(--standout);
+}
+
+
+/* 
+ * ===========================================================================
+ * Buttons
+ * ===========================================================================
+ */
+ /* Primary button */
+.btn-primary,
+.btn-primary:disabled {
+    color: var(--mainColor);
+    font-family: var(--secondaryFont);
+    background-color: transparent;
+    border-color: var(--mainColor);
+}
+
+ /* Primary button hover */
+.btn-primary:hover,
+.btn-primary:focus {
+    color: var(--mainColor);
+    background-color: var(--secondaryBackground);
+    border-color: var(--mainColor);
+}
+
+/* 
+ * ===========================================================================
+ * Login 
+ * ===========================================================================
+ */
+/* Login container */
+.login {
+    margin-top: 5%;
+}
+
+/* Login title */
+.login__title {
+    color: var(--mainColor);
+    padding-bottom: .5em;
+}
+
+/* 
+ * ===========================================================================
+ * Index 
+ * ===========================================================================
+ */
+/* Index container */
+.index {
+    margin-top: 5%;
+}
+
+/* Index title */
+.index__title {
+    color: var(--mainColor);
+    padding-bottom: .5em;
+}
+
+/* 
+ * ===========================================================================
+ * Grid 
+ * ===========================================================================
+ */
+/* Grid container */
+.grid {
+    margin-top: 5%;
+}
+
+/* Grid title */
+.grid__title {
+    color: var(--mainColor);
+    padding-bottom: .5em;
+}

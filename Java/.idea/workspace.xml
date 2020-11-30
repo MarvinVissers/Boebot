@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f37f1a84-c5f1-4621-8d9c-cc04cacf9c9c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RobotMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RobotMain.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,12 +57,27 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1541164839262</updated>
-      <workItem from="1605518896096" duration="22000" />
+      <workItem from="1605518896096" duration="87000" />
+      <workItem from="1605702275900" duration="81000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="462" y="104" key="FileChooserDialogImpl" timestamp="1605702351024">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="462" y="104" key="FileChooserDialogImpl/0.0.1366.728/1366.0.1920.1040@0.0.1366.728" timestamp="1605702351024" />
+    <state x="379" y="187" key="com.intellij.ide.util.TipDialog" timestamp="1605702282275">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="379" y="187" key="com.intellij.ide.util.TipDialog/0.0.1366.728/1366.0.1920.1040@0.0.1366.728" timestamp="1605702282275" />
+    <state x="65" y="65" key="new project wizard" timestamp="1605702356087">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="65" y="65" key="new project wizard/0.0.1366.728/1366.0.1920.1040@0.0.1366.728" timestamp="1605702356087" />
   </component>
   <component name="masterDetails">
     <states>
