@@ -3,8 +3,6 @@ package Controller;
 import java.util.ArrayList;
 
 public class ObstacleController extends ApiRequest {
-
-
     /**
      * Constructor for the Controller.ApiRequest
      *
