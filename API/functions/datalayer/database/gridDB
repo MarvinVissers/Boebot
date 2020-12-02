@@ -1,0 +1,42 @@
+<?php
+/**
+ * @author Marvin Vissers
+ */
+
+// Linking to classes in the datalayer
+require_once("../functions/datalayer/database.php");
+
+class GridDB  {
+    // Creating variabels for in the class
+    private $conn;
+
+    /* Creating a new instance of GridDB */
+    public function __construct() {
+        // Making a connection with the database
+        $database = new Database();
+        $this->conn = $database->getConnection();
+    }
+
+    public function getGrids() {
+        echo "Ik wordt aangeroepen <br>";
+        // Creating an array to fill it later
+        $gridList = array();
+
+        // Query to get all the grids
+        $query = "SELECT * FROM grid";
+        $stmt = $this->conn->prepare($query);
+        if ($stmt->execute()) {
+            // Getting the results
+            $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+            // Filling the array with the grid object
+            foreach ($result as $grid) {
+                $gridModel = new Grid($grid->id, $grid->name, $grid->length, $grid->height);
+                array_push($gridList, $gridModel);
+            }
+        }
+        // Returning the array
+        return $gridList;
+    }
+}
+?>

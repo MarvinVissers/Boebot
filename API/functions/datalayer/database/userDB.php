@@ -28,11 +28,11 @@
             $password = $userModel->getPassword();
 
             $query = "SELECT ID, password FROM user WHERE username = ?";
-            $stm = $this->conn->prepare($query);
-            $stm->bindParam(1, $username);
-            if ($stm->execute()) {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(1, $username);
+            if ($stmt->execute()) {
                 // Getting the user
-                $result = $stm->fetch(PDO::FETCH_OBJ);
+                $result = $stmt->fetch(PDO::FETCH_OBJ);
 
                 // Checking if passwords match
                 if (password_verify($password, $result->password)) {

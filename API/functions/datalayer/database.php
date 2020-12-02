@@ -6,9 +6,9 @@
 
         // Database login information
         private $host = 'localhost';
-        private $db_name = 'ijssalon';
-        private $username = 'root';
-        private $password = '';
+        private $db_name = 'bp6_helloworldbot';
+        private $username = 'helloworldbot';
+        private $password = 'Kz#tz596';
 
         /**
          * Function to get database connection

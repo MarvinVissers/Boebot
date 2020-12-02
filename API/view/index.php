@@ -5,35 +5,16 @@
 
     // Requireing the user controller and user model
     require("../functions/controller/userController.php");
+    require("../functions/controller/gridController.php");
     require("../functions/model/user.php");
+    require("../functions/model/grid.php");
 
-    $userCtrl = new userController();
+    // Making instances of the controllers
+    $userCtrl = new UserController();
+    $gridCtrl = new GridController();
 
-    // Checking if feedback on login is given
-    $loginError = null;
-
-    if (isset($_GET['error'])) {
-        $loginError = $_GET['error'];
-    }
-
-    // Checking if button is pressed
-    if (isset($_POST["btnSubmit"])) {
-        // Getting the values of the input types
-        $username = htmlspecialchars($_POST["txtUsername"]);
-        $password = htmlspecialchars($_POST["txtPassword"]);
-
-        // Checking if all fields are filled in
-        if (!empty($username) || !empty($password)) {
-            // Putting the variabels in the User model
-            $userModel = new User(null, $username, $password);
-
-            // Sending the model to the login function in the controller
-            $userCtrl->userLogin($userModel);
-        } else {
-            // Reloading the page with an error
-            header("Location: login?error=1");
-        }
-    }
+    // Getting all the grids
+    $gridList = $gridCtrl->getGrids();
 ?>
 
 <!DOCTYPE html>
@@ -56,7 +37,20 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                    
+                        <table class="table table__grid">
+                            <tr class="table__row table__head"> <th>Name</th> <th>Size</th> <th>Actions</th> </tr>
+                            <?php
+                                foreach ($gridList as $grid) {
+                                    ?>
+                                    <tr class="table__row">
+                                        <td class="table__td"><?php echo $grid->getName(); ?></td>
+                                        <td class="table__td"><?php echo $grid->getLength(); ?> by <?php echo $grid->getHeight(); ?></td>
+                                        <td class="table__td"><a href="grid?gridId=<?php echo $grid->getId(); ?>" class="table__link table--details">Details</a></td>
+                                    </tr>
+                                    <?php
+                                }
+                            ?>
+                        </table>
                     </div>
                 </div>
             </section>

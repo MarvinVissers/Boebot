@@ -38,7 +38,7 @@
                 if ($userModel->getID() != null) {
                     // Starting the session
                     session_start();
-                    $_SESSION['userID'] = $userModel->getID();
+                    $_SESSION['userId'] = $userModel->getID();
 
                     // Sending the user to the home page
                     header("Location: index");

@@ -7,6 +7,7 @@
  * Variabels
  * Basic page styling
  * Forms
+ * Tables
  * Buttons
  * Login
  * Index
@@ -100,6 +101,50 @@ html, body {
     border-color: var(--standout);
 }
 
+/*
+ * ===========================================================================
+ * Tables
+ * ===========================================================================
+ */
+/* Setting table color on white */
+.table {
+    color: var(--mainTextColor);
+}
+
+/* Setting the link in the standout color */
+.table__link {
+    position: relative;
+    display: inline-block;
+    width: auto;
+    color: var(--standout);
+    font-size: inherit;
+    text-decoration: none;
+    text-decoration-skip-ink: none;
+}
+
+/* Making an underline under the link that get full with on hover */
+.table__link::after {
+    content: '';
+    position: relative;
+    display: block;
+    height: 0.1rem;
+    width: 0;
+    color: var(--standout);
+    background-color: var(--standout);
+    transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1) 0s;
+}
+
+/* Making sure the link stays the same on hover */
+.table__link:hover {
+    color: var(--standout);
+    text-decoration: none;
+    text-decoration-skip-ink: none;
+}
+
+/* Giving the after full width */
+.table__link:hover::after {
+    width: 100%;
+}
 
 /* 
  * ===========================================================================

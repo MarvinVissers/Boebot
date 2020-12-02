@@ -2,23 +2,25 @@
     /**
      * @author Marvin Vissers
      */
-    class Obstacle  {
+    class Grid {
         // Creating the variables
         private $id;
-        private $gridId;
+        private $name;
         private $length;
         private $height;
 
         /**
-         * Creates a new instance of Obstacle
-         * 
-         * @param pid id of the product
-         * @param product product name
+         * Creates a new instance of Grid
+         *
+         * @param id id of the grid
+         * @param name name of the grid
+         * @param length the length of the grid
+         * @param height the height of the grid
          */
-        public function __construct($id, $gridId, $length, $height) {
+        public function __construct($id, $name, $length, $height) {
             // Setting the given values equal to the variables in the class
             $this->id = $id;
-            $this->gridId = $gridId;
+            $this->name = $name;
             $this->length = $length;
             $this->height = $height;
         }
@@ -26,17 +28,17 @@
         public function getId() {
             return $this->id;
         }
-    
+
         public function setId($id) {
             $this->id = $id;
         }
 
-        public function getGridId() {
-            return $this->gridId;
+        public function getName() {
+            return $this->name;
         }
-    
-        public function setGridId($gridId) {
-            $this->gridId = $gridId;
+
+        public function setName($name) {
+            $this->name = $name;
         }
 
         public function getLength() {
@@ -50,9 +52,9 @@
         public function getHeight() {
             return $this->height;
         }
-    
+
         public function setHeight($height) {
             $this->height = $height;
         }
-    }  
+    }
 ?>
