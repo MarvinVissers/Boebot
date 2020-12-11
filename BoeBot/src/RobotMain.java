@@ -1,7 +1,7 @@
+import Controller.BoeBotController;
 import Controller.LogController;
 import Controller.ObstacleController;
 import Controller.LogController;
-import Model.Obstacle;
 import Model.Log;
 
 import TI.BoeBot;
@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 
 public class RobotMain {
 
+
     public static void main(String[] args) throws UnknownHostException {
         // Creating instances of the needed classes
         ObstacleController obstacleCtrl = new ObstacleController("obstacle");
@@ -17,9 +18,14 @@ public class RobotMain {
 
         Log log = new Log(null, "Opstarten Boebot");
         logCtrl.post(log);
+        BoeBotController BoeController = new BoeBotController();
+        BoeController.Astar();
+
 
         while (true) {
-            BoeBot.wait(250);
+            BoeController.KnipperLinks();
+            BoeController.KnipperRechts();
+            BoeController.ObstacleDetect();
         }
     }
 }
