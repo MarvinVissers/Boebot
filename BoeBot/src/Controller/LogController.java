@@ -2,10 +2,14 @@ package Controller;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+
+import Model.Log;
 
 import json.*;
 
@@ -36,45 +40,26 @@ public class LogController extends ApiRequest {
      */
     @Override
     public void post(Object obj) {
-        System.out.println(obj);
+        // Converting the object to Log
+        Log log = Log.class.cast(obj);
+
+        // Making the text URL safe
+        String sText = makeUrlFriendly(log.getText());
 
         try {
-
-            URL oracle = new URL("https://bp6.adainforma.tk/helloworldbot/functions/datalayer/api/obstacle/?selector=ae026dd58cd57fd2&validator=4424bdd85905aa88646327911b6893598a279abb4f82466dca61a988041afb08&action=get");
+            // Setting to URL to post to
+            URL oracle = new URL(this.baseURL + "&action=post&text=" + sText);
+            // Opening the file
             URLConnection yc = oracle.openConnection();
+            // Reading the file
             BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 
+            // String for the given JSON
             String inputLine;
+            // Looping through the JSON
             while ((inputLine = in.readLine()) != null) {
-                JsonArray json = Json.parse(inputLine).asArray();
-
-                System.out.println(json);
-
-                for (Object o : json) {
-
-                    JsonObject Cords = (JsonObject) o;
-//                    //haal de eerste coords op.
-//                    JsonValue Row = Cords.get("row1");
-//                    JsonValue Column = Cords.get("column1");
-//                    //haal de 2e coords op.
-//                    JsonValue Row2 = Cords.get("row2");
-//                    JsonValue Column2 = Cords.get("column2");
-
-                    String iRow = removeQuotes(Cords.get("row1"));
-                    System.out.println(iRow);
-
-//                    int iRow = Integer.parseInt(String.valueOf(Row));
-//                    int iColum = Integer.parseInt(String.valueOf(Column));
-//                    int iRow2 = Integer.parseInt(String.valueOf(Row2));
-//                    int iColum2 = Integer.parseInt(String.valueOf(Column2));
-
-//                    System.out.println(iRow);
-
-//                    blocksArray.add(new int[]{iRow, iColum});
-//                    blocksArray.add(new int[]{iRow2, iColum2});
-
-                    //TODO er voor zorgen dat alles word toegevoegd.
-                }
+                // Outputting the result
+                System.out.println(inputLine);
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -88,8 +73,27 @@ public class LogController extends ApiRequest {
      */
     @Override
     public String removeQuotes(JsonValue sJsonValue) {
+        // Remvoing the quotes from the JsonValue
         String sNewJsonValue = sJsonValue.toString().replace("\"", "");
 
         return sNewJsonValue;
+    }
+
+    /**
+     * Function to make a String URL friendly
+     *
+     * @param sText the String that needs to be made URL friendly
+     * @return the String that is URL friendly
+     */
+    @Override
+    public String makeUrlFriendly(String sText) {
+        try {
+            // Converting the String to url safe
+            String url = URLEncoder.encode(sText, "UTF-8");
+            return url;
+        } catch (UnsupportedEncodingException e) {
+            System.out.println(e);
+            return null;
+        }
     }
 }

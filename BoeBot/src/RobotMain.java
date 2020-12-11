@@ -7,6 +7,7 @@ import Model.Log;
 import TI.BoeBot;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 public class RobotMain {
 
@@ -15,8 +16,11 @@ public class RobotMain {
         ObstacleController obstacleCtrl = new ObstacleController("obstacle");
         LogController logCtrl = new LogController("log");
 
-        Log log = new Log(null, "Opstarten Boebot");
-        logCtrl.post(log);
+        // Filling the obstacle list
+        ArrayList<Obstacle> obstacles = new ArrayList(obstacleCtrl.get());
+        // Filling an array with the obstacle coordinates
+        ArrayList<int[]> obstacleCoordinates = new ArrayList(obstacleCtrl.createObstacleList(obstacles));
+        System.out.println(obstacleCoordinates.size());
 
         while (true) {
             BoeBot.wait(250);
