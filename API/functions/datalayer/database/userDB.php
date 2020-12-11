@@ -27,7 +27,7 @@
             $username = $userModel->getUsername();
             $password = $userModel->getPassword();
 
-            $query = "SELECT ID, password FROM user WHERE username = ?";
+            $query = "SELECT * FROM user WHERE username = ?";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(1, $username);
             if ($stmt->execute()) {

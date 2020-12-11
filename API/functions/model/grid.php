@@ -6,23 +6,23 @@
         // Creating the variables
         private $id;
         private $name;
-        private $length;
-        private $height;
+        private $rows;
+        private $columns;
 
         /**
          * Creates a new instance of Grid
          *
          * @param id id of the grid
          * @param name name of the grid
-         * @param length the length of the grid
-         * @param height the height of the grid
+         * @param rows the rows of the grid
+         * @param columns the columns of the grid
          */
-        public function __construct($id, $name, $length, $height) {
+        public function __construct($id, $name, $rows, $columns) {
             // Setting the given values equal to the variables in the class
             $this->id = $id;
             $this->name = $name;
-            $this->length = $length;
-            $this->height = $height;
+            $this->rows = $rows;
+            $this->columns = $columns;
         }
 
         public function getId() {
@@ -41,20 +41,20 @@
             $this->name = $name;
         }
 
-        public function getLength() {
-            return $this->length;
+        public function getRows() {
+            return $this->rows;
         }
 
-        public function setLength($length) {
-            $this->length = $length;
+        public function setRows($rows) {
+            $this->rows = $rows;
         }
 
-        public function getHeight() {
-            return $this->height;
+        public function getColumns() {
+            return $this->columns;
         }
 
-        public function setHeight($height) {
-            $this->height = $height;
+        public function setColumns($columns) {
+            $this->columns = $columns;
         }
     }
 ?>

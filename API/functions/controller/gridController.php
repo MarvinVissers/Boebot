@@ -9,7 +9,7 @@ require_once("../functions/datalayer/database/gridDB.php");
 require_once("../functions/helper/validateInput.php");
 
 class GridController {
-    // Variabels for the needed UserDB en Validate classes
+    // Variabels for the needed GridDB en Validate classes
     private $gridDB;
     private $validate;
 
@@ -30,6 +30,29 @@ class GridController {
 
         // Returning the filled array
         return $gridList;
+    }
+
+    /**
+     * @return gridModel a model of the grid
+     */
+    public function getGrid() {
+        // Filling the model with the data from the the database
+        $gridModel = $this->gridDB->getGrid();
+
+        // Returning the filled array
+        return $gridModel;
+    }
+
+    /**
+     * Function to update the grid
+     * @param $gridModel model of the grid
+     */
+    public function updateGrid($gridModel) {
+        // Sending the model the datalayer
+        $this->gridDB->updateGrid($gridModel);
+
+        // Sending user to grid page
+         header("Location: grid");
     }
 }
 ?>

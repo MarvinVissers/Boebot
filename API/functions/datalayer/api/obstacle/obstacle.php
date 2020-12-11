@@ -34,7 +34,7 @@
                 // Looping through the results
                 foreach ($result as $obstacle) {
                     // Filling the obstacle model
-                    $obstacleModel = array("id" => $obstacle->id, "gridId" => $obstacle->gridId, "length" => $obstacle->length, "height" => $obstacle->height);
+                    $obstacleModel = array("id" => $obstacle->id, "gridId" => $obstacle->gridId, "row1" => $obstacle->row1, "column1" => $obstacle->column1, "row2" => $obstacle->row2, "column2" => $obstacle->column2);
                     array_push($obstacleList, $obstacleModel); 
                 }
             }
@@ -115,7 +115,7 @@
                 // Looping through the results
                 foreach ($result as $obstacle) {
                     // Filling the obstacle model
-                    $obstacleModel = array("id" => $obstacle->id, "gridId" => $obstacle->gridId, "length" => $obstacle->length, "height" => $obstacle->height);
+                    $obstacleModel = array("id" => $obstacle->id, "gridId" => $obstacle->gridId, "row1" => $obstacle->row1, "column1" => $obstacle->column1, "row2" => $obstacle->row2, "column2" => $obstacle->column2);
                     array_push($obstacleList, $obstacleModel); 
                 }
             }

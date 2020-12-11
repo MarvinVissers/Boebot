@@ -13,8 +13,23 @@
     $userCtrl = new UserController();
     $gridCtrl = new GridController();
 
-    // Getting all the grids
-    $gridList = $gridCtrl->getGrids();
+    $userID = null;
+
+//    // Checking if user is logged in
+//    if (isset($_SESSION['userId'])) {
+//        $userID = $_SESSION['userId'];
+//    } else {
+//        header("Location: login");
+//    }
+
+    // Checking if button of form is pressed
+    if (isset($_POST["btnSubmit"])) {
+        // Filling the grid model
+        $gridModel = new Grid(1, null, $_POST["txtRows"], $_POST["txtColumns"]);
+
+        // Updating the grid
+        $gridCtrl->updateGrid($gridModel);
+    }
 ?>
 
 <!DOCTYPE html>
@@ -31,28 +46,30 @@
             <section class="container">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h1 class="index__title">Grid selection</h1>
+                        <h1 class="index__title">Create grid</h1>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <table class="table table__grid">
-                            <tr class="table__row table__head"> <th>Name</th> <th>Size</th> <th>Actions</th> </tr>
-                            <?php
-                                foreach ($gridList as $grid) {
-                                    ?>
-                                    <tr class="table__row">
-                                        <td class="table__td"><?php echo $grid->getName(); ?></td>
-                                        <td class="table__td"><?php echo $grid->getLength(); ?> by <?php echo $grid->getHeight(); ?></td>
-                                        <td class="table__td"><a href="grid?gridId=<?php echo $grid->getId(); ?>" class="table__link table--details">Details</a></td>
-                                    </tr>
-                                    <?php
-                                }
-                            ?>
-                        </table>
+                <form action="" method="post">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label for="rows">Rows</label>
+                            <input type="number" name="txtRows" id="rows" class="form-control" maxlength="2" minlength="1" min="1" max="99" required>
+                            <span class="form__feedback"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="columns">Columns</label>
+                            <input type="number" name="txtColumns" id="columns" class="form-control" maxlength="2" minlength="1" min="1" max="99" required>
+                            <span class="form__feedback"></span>
+                        </div>
                     </div>
-                </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <input type="submit" name="btnSubmit" value="Grid maken" class="btn-primary">
+                        </div>
+                    </div>
+                </form>
             </section>
         </main>
 

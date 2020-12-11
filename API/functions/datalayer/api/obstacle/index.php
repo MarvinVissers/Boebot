@@ -36,13 +36,13 @@
             switch ($action) {
                 case "post":
                     // Filling the obstacle model
-                    $obstacleModel = new Obstacle(null, $_GET["gridId"], $_GET["length"], $_GET["height"]);
+                    $obstacleModel = new Obstacle(null, 1, $_GET["row1"], $_GET["column1"], $_GET["row2"], $_GET["column2"]);
                     // Adding the obstacle to the database
                     $result = $obstacleAPI->post($obstacleModel);
                     break;
                 case "put":
                     // Filling the obstacle model
-                    $obstacleModel = new Obstacle($_GET["id"], $_GET["gridId"], $_GET["length"], $_GET["height"]);
+                    $obstacleModel = new Obstacle($_GET["id"], 1, $_GET["row1"], $_GET["column1"], $_GET["row2"], $_GET["column2"]);
                     // Updating the obstacle to the database
                     $result = $obstacleAPI->put($obstacleModel);
                     break;
@@ -59,7 +59,7 @@
             };
 
             // Converting the array to json
-            echo json_encode(array("obstacle" => $result));
+            echo json_encode($result);
         } else echo json_encode("Ongeldige acces key");
     } else echo json_encode("Ja die link he, die is niet geldig");
 ?>

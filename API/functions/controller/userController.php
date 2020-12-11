@@ -35,6 +35,8 @@
                 $userID = $this->userDB->userLogin($userModel);
                 $userModel->setID($userID);
 
+                echo $userID;
+
                 if ($userModel->getID() != null) {
                     // Starting the session
                     session_start();
