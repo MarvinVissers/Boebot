@@ -1,21 +1,23 @@
 package Model;
 
 public class Obstacle {
-    private int iid, gridId, length, height;
+    private int id, gridId, row1, column1, row2, column2;
 
-    public Obstacle(int iid, int gridId, int length, int height) {
-        this.iid = iid;
+    public Obstacle(int id, int gridId, int row1, int column1, int row2, int column2) {
+        this.id = id;
         this.gridId = gridId;
-        this.length = length;
-        this.height = height;
+        this.row1 = row1;
+        this.column1 = column1;
+        this.row2 = row2;
+        this.column2 = column2;
     }
 
-    public int getIid() {
-        return iid;
+    public int getId() {
+        return id;
     }
 
-    public void setIid(int iid) {
-        this.iid = iid;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getGridId() {
@@ -26,19 +28,47 @@ public class Obstacle {
         this.gridId = gridId;
     }
 
-    public int getLength() {
-        return length;
+    public int getRow1() {
+        return row1;
     }
 
-    public void setLength(int length) {
-        this.length = length;
+    public void setRow1(int row1) {
+        this.row1 = row1;
     }
 
-    public int getHeight() {
-        return height;
+    public int getColumn1() {
+        return column1;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
+    public void setColumn1(int column1) {
+        this.column1 = column1;
+    }
+
+    public int getRow2() {
+        return row2;
+    }
+
+    public void setRow2(int row2) {
+        this.row2 = row2;
+    }
+
+    public int getColumn2() {
+        return column2;
+    }
+
+    public void setColumn2(int column2) {
+        this.column2 = column2;
+    }
+
+    @Override
+    public String toString() {
+        return "Obstacle{" +
+                "id=" + id +
+                ", gridId=" + gridId +
+                ", row1=" + row1 +
+                ", column1=" + column1 +
+                ", row2=" + row2 +
+                ", column2=" + column2 +
+                '}';
     }
 }

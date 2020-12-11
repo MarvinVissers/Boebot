@@ -1,5 +1,8 @@
 package Controller;
 
+import json.JsonValue;
+
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class ObstacleController extends ApiRequest {
@@ -8,9 +11,10 @@ public class ObstacleController extends ApiRequest {
      *
      * @param sMap the map of the api
      */
-    public ObstacleController(String sMap) {
+    public ObstacleController(String sMap) throws UnknownHostException {
         super(sMap);
-        System.out.println(baseURL);
+//        System.out.println(baseURL);
+//        System.out.println(sIpAdres);
     }
 
     /**
@@ -19,7 +23,7 @@ public class ObstacleController extends ApiRequest {
      * @return List with objects of the API map
      */
     @Override
-    ArrayList<Object> get() {
+    public ArrayList<Object> get() {
         return null;
     }
 
@@ -29,7 +33,7 @@ public class ObstacleController extends ApiRequest {
      * @param obj model of the object of the API map
      */
     @Override
-    void post(Object obj) {
+    public void post(Object obj) {
 
     }
 
@@ -38,8 +42,20 @@ public class ObstacleController extends ApiRequest {
      *
      * @param obj model of the object of the API map
      */
-    @Override
-    void delete(Object obj) {
+//    @Override
+//    void delete(Object obj) {
+//
+//    }
 
+    /**
+     * Function to remove quotes from the JsonValue String
+     *
+     * @param sJsonValue the gotton value of the API
+     */
+    @Override
+    public String removeQuotes(JsonValue sJsonValue) {
+        String sNewJsonValue = sJsonValue.toString().replace("\"", "");
+
+        return sNewJsonValue;
     }
 }
