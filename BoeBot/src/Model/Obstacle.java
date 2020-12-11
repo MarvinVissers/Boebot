@@ -1,9 +1,10 @@
 package Model;
 
 public class Obstacle {
-    private int id, gridId, row1, column1, row2, column2;
+    private Integer id;
+    private int gridId, row1, column1, row2, column2;
 
-    public Obstacle(int id, int gridId, int row1, int column1, int row2, int column2) {
+    public Obstacle(Integer id, int gridId, int row1, int column1, int row2, int column2) {
         this.id = id;
         this.gridId = gridId;
         this.row1 = row1;

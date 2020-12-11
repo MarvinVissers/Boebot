@@ -74,6 +74,7 @@ public class ObstacleController extends ApiRequest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         // Returning the filled Array
         return listObstacles;
     }
@@ -85,36 +86,26 @@ public class ObstacleController extends ApiRequest {
      */
     @Override
     public void post(Object obj) {
+        // Converting obstacles to the obstacle class
+        Obstacle obstacle = Obstacle.class.cast(obj);
 
-    }
-
-    /**
-     * Function to remove quotes from the JsonValue String
-     *
-     * @param sJsonValue the gotton value of the API
-     */
-    @Override
-    public String removeQuotes(JsonValue sJsonValue) {
-        String sNewJsonValue = sJsonValue.toString().replace("\"", "");
-
-        return sNewJsonValue;
-    }
-
-    /**
-     * Function to make a String URL friendly
-     *
-     * @param sText the String that needs to be made URL friendly
-     * @return the String that is URL friendly
-     */
-    @Override
-    public String makeUrlFriendly(String sText) {
         try {
-            // Converting the String to url safe
-            String url = URLEncoder.encode(sText, "UTF-8");
-            return url;
-        } catch (UnsupportedEncodingException e) {
+            // Setting to URL to post to
+            URL oracle = new URL(this.baseURL + "&action=post&row1=" + obstacle.getRow1() + "&column1=" + obstacle.getColumn1() + "&row2=" + obstacle.getRow2() + "&column2=" + obstacle.getColumn2());
+            // Opening the file
+            URLConnection yc = oracle.openConnection();
+            // Reading the file
+            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+
+            // String for the given JSON
+            String inputLine;
+            // Looping through the JSON
+            while ((inputLine = in.readLine()) != null) {
+                // Outputting the result
+                System.out.println(inputLine);
+            }
+        } catch (Exception e) {
             System.out.println(e);
-            return null;
         }
     }
 

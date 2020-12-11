@@ -1,16 +1,16 @@
 package Controller;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.net.UnknownHostException;
+import java.lang.reflect.Array;
+import java.net.*;
 import java.util.ArrayList;
 
 import Model.Log;
 
+import Model.Obstacle;
 import json.*;
 
 public class LogController extends ApiRequest {
@@ -48,7 +48,7 @@ public class LogController extends ApiRequest {
 
         try {
             // Setting to URL to post to
-            URL oracle = new URL(this.baseURL + "&action=post&text=" + sText);
+            URL oracle = new URL(this.baseURL + "&action=post&boebot=" + this.sIpAdres + "&text=" + sText);
             // Opening the file
             URLConnection yc = oracle.openConnection();
             // Reading the file
@@ -66,34 +66,47 @@ public class LogController extends ApiRequest {
         }
     }
 
-    /**
-     * Function to remove quotes from the JsonValue String
-     *
-     * @param sJsonValue the gotton value of the API
-     */
-    @Override
-    public String removeQuotes(JsonValue sJsonValue) {
-        // Remvoing the quotes from the JsonValue
-        String sNewJsonValue = sJsonValue.toString().replace("\"", "");
-
-        return sNewJsonValue;
-    }
-
-    /**
-     * Function to make a String URL friendly
-     *
-     * @param sText the String that needs to be made URL friendly
-     * @return the String that is URL friendly
-     */
-    @Override
-    public String makeUrlFriendly(String sText) {
+    public String getLastLog() {
         try {
-            // Converting the String to url safe
-            String url = URLEncoder.encode(sText, "UTF-8");
-            return url;
-        } catch (UnsupportedEncodingException e) {
+            // Setting to URL to post to
+            URL apiLink = new URL(this.baseURL + "&action=get&boebot=" + this.sIpAdres);
+            // Opening the file
+            URLConnection apiConnection = apiLink.openConnection();
+            // Reading the file
+            BufferedReader result = new BufferedReader(new InputStreamReader(apiConnection.getInputStream()));
+
+            System.out.println(apiLink);
+
+            // String for the given JSON
+            String inputLine;
+            // Looping through the JSON
+            while ((inputLine = result.readLine()) != null) {
+                // Creating an array of the result
+                JsonArray json = Json.parse(inputLine).asArray();
+
+                // Looping through the result
+                for (Object o : json) {
+                    // Converting the array to an Object
+                    JsonObject obj = (JsonObject) o;
+
+                    // Getting the values
+                    int iId = Integer.parseInt(removeQuotes(obj.get("id")));
+                    String sText = (removeQuotes(obj.get("text")));
+
+                    // Filling the Log model
+                    Log log = new Log(iId, this.sIpAdres, sText);
+
+                    System.out.println(sText);
+
+                    // Returning the last log
+                    return log.getText();
+                }
+            }
+        } catch (Exception e) {
+            // Printing the error
             System.out.println(e);
-            return null;
         }
+        // Returning nothing
+        return null;
     }
 }
