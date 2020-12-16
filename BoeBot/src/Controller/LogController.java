@@ -66,6 +66,14 @@ public class LogController extends ApiRequest {
         }
     }
 
+    public void postLog(String sText) {
+        // Creating an log object
+        Log log = new Log(null, this.sIpAdres, sText);
+
+        // Posting the log
+        post(log);
+    }
+
     public String getLastLog() {
         try {
             // Setting to URL to post to
@@ -74,8 +82,6 @@ public class LogController extends ApiRequest {
             URLConnection apiConnection = apiLink.openConnection();
             // Reading the file
             BufferedReader result = new BufferedReader(new InputStreamReader(apiConnection.getInputStream()));
-
-            System.out.println(apiLink);
 
             // String for the given JSON
             String inputLine;

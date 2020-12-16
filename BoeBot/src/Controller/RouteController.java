@@ -8,63 +8,53 @@ import java.util.Arrays;
 
 public class RouteController {
 
-
-
     public RouteController() {
 
     }
 
-//    public int DriveRoute(ArrayList<int[]> Route, int iLastX, int iLastY, int iOffSet){
-//        if(iOffSet < Route.size()){
-//            String RouteOffSet = Arrays.toString(Route.get(iOffSet));
-//            System.out.println(RouteOffSet);
-//
-//            int iEnd = Route.indexOf(",");
-//            iLastX = Integer.parseInt(RouteOffSet.substring(1, iEnd));
-//            System.out.println(iLastX);
-//
-//            iOffSet++;
-//            return DriveRoute(Route, iLastX, iLastY, iOffSet);
-//        } else {
-//            return 1;
-//        }
-//    }
-
-    public Route DriveRoute(Route route){
+    /**
+     * Function to set the new coordinates for the boebot to drive to
+     * @param route the Route object
+     * @return the new Route object
+     */
+    public Route DriveRoute(Route route) {
+        // Checking if there is a new point for the Boebot to drive to
         if(route.getOffset() < route.getListCoordinates().size()) {
+            // Setting the new point to drive to
             Node routeOffset = route.getListCoordinates().get(route.getOffset());
 
-//            Route route = new Route(Route, routeOffset, sDirection, iOffSet, 0);
-            System.out.println("Nieuwe route"+ routeOffset);
-            System.out.println("Oude route" + route.getLastCoordinates());
-
-            String sNewDirection;
             // Last 0,0 New = 1,0
+            // Checking wether the row or column changes for the boebots direction
             if (route.getLastCoordinates().getRow() < routeOffset.getRow()) {
-                System.out.println("Right");
-                sNewDirection = "Right";
-                route.setDirection(sNewDirection);
+                // Setting the new direction
+                route.setDirection("Right");
             } else if (route.getLastCoordinates().getRow() > routeOffset.getRow()) {
-                System.out.println("Links");
-                sNewDirection = "Left";
-                route.setDirection(sNewDirection);
+                // Setting the new direction
+                route.setDirection("Left");
             } else if (route.getLastCoordinates().getCol() < routeOffset.getCol()) {
-                System.out.println("Ga omhoog");
-                sNewDirection = "Up";
-                route.setDirection(sNewDirection);
+                // Setting the new direction
+                route.setDirection("Up");
             } else if (route.getLastCoordinates().getCol() > routeOffset.getCol()) {
-                System.out.println("Down");
-                sNewDirection = "Down";
-                route.setDirection(sNewDirection);
+                // Setting the new direction
+                route.setDirection("Down");
             } else {
-                System.out.println("Ik weet het niet meer");
+                System.out.println("Oof");
             }
 
+            // Updating the offset
             int iOffset = route.getOffset() + 1;
             route.setOffset(iOffset);
+
+            // Updating the last coordinates
+            route.setLastCoordinates(routeOffset);
+
+            // Giving back the new route
             return route;
         } else {
+            // Setting the result to done
             route.setResult(1);
+
+            // Giving back the route
             return route;
         }
     }

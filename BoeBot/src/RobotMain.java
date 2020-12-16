@@ -33,6 +33,7 @@ public class RobotMain {
         ObstacleController obstacleCtrl = new ObstacleController("obstacle");
         LogController logCtrl = new LogController("log");
         RouteController routeCtrl = new RouteController();
+        BoeBotController BoeController = new BoeBotController();
 
         /**
          * Getting obstacles and creating list with obstacle coordinates for Rick
@@ -66,32 +67,39 @@ public class RobotMain {
         ArrayList<Obstacle> obstacles = new ArrayList(obstacleCtrl.get());
         // Filling an array with the obstacle coordinates
         ArrayList<int[]> obstacleCoordinates = new ArrayList(obstacleCtrl.createObstacleList(obstacles));
-        Log log = new Log(null, "Opstarten Boebot");
+        Log log = new Log(null, null, "Opstarten Boebot");
         logCtrl.post(log);
-        BoeBotController BoeController = new BoeBotController();
 //        ArrayList<int[]> Route = BoeController.Astar(obstacleCoordinates);
         ArrayList<Node> Route = BoeController.testStar(obstacleCoordinates);
 
-//        routeCtrl.DriveRoute(Route, 0, 0, 0);
-
-       // BoeBot.wait(10000);
+//        BoeBot.wait(10000);
         Slink.update(NormaleSnelheid - RaceSnelHeid);
         Srechts.update(NormaleSnelheid2 + RaceSnelHeid);
         Route route = routeCtrl.DriveRoute(new Route(Route, new Node(0, 0), "Right", 1, 0));
 
         while (true) {
-           // System.out.println(Arrays.deepToString(BoeController.Astar(obstacleCoordinates).toArray()));
-            //BoeController.Astar(obstacleCoordinates);
+            BoeController.Astar(obstacleCoordinates);
             BoeBot.wait(1000);
 
             int sensor1 = BoeBot.analogRead(AnalogPin1);
             int sensor2 = BoeBot.analogRead(AnalogPin2);
             int sensor3 = BoeBot.analogRead(AnalogPin3);
 
-            // Functie voor kruispunte
-            if ((sensor1 >= Gevoeligheid) && (sensor2 >= Gevoeligheid) && (sensor3 >= Gevoeligheid)) {
-                System.out.println("Alvast voor een kruispunt");
+            // Checking if the boebot found a crossroad while driving the route
+            if ((sensor1 >= Gevoeligheid) && (sensor2 >= Gevoeligheid) && (sensor3 >= Gevoeligheid) && route.getResult() == 0) {
+//                System.out.println("Alvast voor een kruispunt");
                 BoeBot.freqOut(0,1500,1000);
+
+                try {
+                    // Getting the coordinates for the log
+                    Node newCoordinates = route.getListCoordinates().get(route.getOffset());
+
+                    // Sending it to the log
+                    logCtrl.postLog("Found a crossroad. Turning " + route.getDirection() + " from (" + route.getLastCoordinates().getRow() + ", " + route.getLastCoordinates().getCol() + ") to (" + newCoordinates.getRow() + ", " + newCoordinates.getCol() + ")");
+                } catch (Exception e) {
+                    System.out.println("Offset te groot");
+                }
+
                 switch (route.getDirection()) {
                     case "Right":
                         BoeController.turnDegrees(90, 50);
@@ -112,8 +120,10 @@ public class RobotMain {
                 route = routeCtrl.DriveRoute(route);
 
                 if (route.getResult() == 1) {
-                    System.out.println("Route geslaagd");
+                    logCtrl.postLog("Route completed");
                 }
+            } else {
+                // IDK, do something
             }
         }
     }
