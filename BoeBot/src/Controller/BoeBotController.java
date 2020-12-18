@@ -38,24 +38,7 @@ public class BoeBotController {
 //        BoeBot.freqOut(0,1000,1000);
 //    }
 
-    public ArrayList<int[]> Astar( ArrayList<int[]> obstacleCoordinates) throws UnknownHostException {
-        ArrayList<int[]> Cordinaten = new ArrayList<>();
-       // System.out.println(Arrays.deepToString(obstacleCoordinates.toArray()));
-        Node initialNode = new Node(0, 0);
-        Node finalNode = new Node(10, 12);
-        int rows = 15;
-        int cols = 15;
-        AStar aStar = new AStar(rows, cols, initialNode, finalNode);
-        //blocksArray = new int[][]{{1, 3}, {2, 3}, {3, 3}};
-        aStar.setBlocks(obstacleCoordinates);
-        List<Node> path = aStar.findPath();
-        for (Node node : path) {
-            Cordinaten.add(new int[]{node.getRow(), node.getCol()});
-        }
-        return Cordinaten;
-    }
-
-    public ArrayList<Node> testStar( ArrayList<int[]> obstacleCoordinates) throws UnknownHostException {
+    public ArrayList<Node> Astar( ArrayList<int[]> obstacleCoordinates) throws UnknownHostException {
         ArrayList<Node> Cordinaten = new ArrayList<>();
         // System.out.println(Arrays.deepToString(obstacleCoordinates.toArray()));
         Node initialNode = new Node(0, 0);

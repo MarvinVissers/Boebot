@@ -70,7 +70,7 @@ public class RobotMain {
         Log log = new Log(null, null, "Opstarten Boebot");
         logCtrl.post(log);
 //        ArrayList<int[]> Route = BoeController.Astar(obstacleCoordinates);
-        ArrayList<Node> Route = BoeController.testStar(obstacleCoordinates);
+        ArrayList<Node> Route = BoeController.Astar(obstacleCoordinates);
 
 //        BoeBot.wait(10000);
         Slink.update(NormaleSnelheid - RaceSnelHeid);
@@ -88,7 +88,7 @@ public class RobotMain {
             // Checking if the boebot found a crossroad while driving the route
             if ((sensor1 >= Gevoeligheid) && (sensor2 >= Gevoeligheid) && (sensor3 >= Gevoeligheid) && route.getResult() == 0) {
 //                System.out.println("Alvast voor een kruispunt");
-                BoeBot.freqOut(0,1500,1000);
+                //BoeBot.freqOut(0,1500,1000);
 
                 try {
                     // Getting the coordinates for the log
