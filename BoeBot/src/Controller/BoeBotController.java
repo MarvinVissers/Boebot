@@ -55,6 +55,14 @@ public class BoeBotController {
         return Cordinaten;
     }
 
+    public void detectObject(){
+        BoeBot.digitalWrite(14, true);
+        BoeBot.wait(1);
+        BoeBot.digitalWrite(14, false);
+        int pulseLength = BoeBot.pulseIn(13, true, 10000) / 58;
+        System.out.println(pulseLength);
+    }
+
     public void turnDegrees(int degrees, int turningSpeed) {
         // kijken of het getal groter is dan 0
         if (turningSpeed > 0){

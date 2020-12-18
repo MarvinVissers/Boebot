@@ -34,6 +34,8 @@ public class RobotMain {
         LogController logCtrl = new LogController("log");
         RouteController routeCtrl = new RouteController();
         BoeBotController BoeController = new BoeBotController();
+        BoeBot.digitalWrite(15,false);
+        BoeBot.digitalWrite(2,false);
 
         /**
          * Getting obstacles and creating list with obstacle coordinates for Rick
@@ -78,6 +80,9 @@ public class RobotMain {
         Route route = routeCtrl.DriveRoute(new Route(Route, new Node(0, 0), "Right", 1, 0));
 
         while (true) {
+           // BoeController.detectObject();
+
+
             BoeController.Astar(obstacleCoordinates);
             BoeBot.wait(1000);
 
