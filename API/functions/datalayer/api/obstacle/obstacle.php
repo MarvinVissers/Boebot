@@ -12,7 +12,8 @@
         private $conn;
 
         public function __construct($conn) {
-            $this->conn = $conn;
+            $database = new Database();
+            $this->conn = $database->getConnection();
         }
 
         /**
@@ -42,51 +43,28 @@
             return $obstacleList;
         }
 
-        public function getDetails($id) {
-            
-        }
-
         public function post($obstacleModel) {
             // Creating variables for in the query
             $gridId = $obstacleModel->getGridId();
-            $length = $obstacleModel->getLength();
-            $height = $obstacleModel->getHeight();
+            $row1 = $obstacleModel->getRow1();
+            $column1 = $obstacleModel->getColumn1();
+            $row2 = $obstacleModel->getRow2();
+            $column2 = $obstacleModel->getColumn2();
 
             // Query to add obstacle to the database
-            $query = "INSERT INTO obstacle(gridId, length, height) VALUES(?, ?, ?)";
+            $query = "INSERT INTO obstacle(gridId, row1, column1, row2, column2) VALUES(?, ?, ?, ?, ?)";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(1, $gridId);
-            $stmt->bindParam(2, $length);
-            $stmt->bindParam(3, $height);
+            $stmt->bindParam(2, $row1);
+            $stmt->bindParam(3, $column1);
+            $stmt->bindParam(4, $row2);
+            $stmt->bindParam(5, $column2);
             if ($stmt->execute()) {
                 // Sending good feedback if row is added
                 return array("feedback" => "row added");
             } else {
                 // Sending bad feedback if row is not added
                 return array("feedback" => "row is not added");
-            }
-        }
-
-        public function put($obstacleModel) {
-            // Creating variables for in the query
-            $id = $obstacleModel->getId();
-            $gridId = $obstacleModel->getGridId();
-            $length = $obstacleModel->getLength();
-            $height = $obstacleModel->getHeight();
-
-            // Query to add obstacle to the database
-            $query = "UPDATE obstacle SET gridId = ?, length = ?, height = ? WHERE id = ?";
-            $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(1, $gridId);
-            $stmt->bindParam(2, $length);
-            $stmt->bindParam(3, $height);
-            $stmt->bindParam(4, $id);
-            if ($stmt->execute()) {
-                // Sending good feedback if row is added
-                return array("feedback" => "Obstacle updated");
-            } else {
-                // Sending bad feedback if row is not added
-                return array("feedback" => "Obstacle could not be updated");
             }
         }
 

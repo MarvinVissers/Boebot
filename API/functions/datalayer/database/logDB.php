@@ -6,12 +6,13 @@
     // Linking to classes in the datalayer
     require_once("../functions/datalayer/database.php");
 
-    class BoeBotDB {
+    class LogDB {
         // Creating variabels for in the class
         private $conn;
 
         /* Creating a new instance of GridDB */
-        public function __construct() {
+        public function __construct()
+        {
             // Making a connection with the database
             $database = new Database();
             $this->conn = $database->getConnection();
@@ -43,16 +44,28 @@
         }
 
         /**
-         * @param $boebotModel the model of the Boebot
+         * @param logModel the model of the Log
          */
-        public function addBoebot($boebotModel) {
+        public function addLogTestItem($logModel) {
             // Creating variables for the query
-            $name = $boebotModel->getName();
+            $boebot = $logModel->getBoebot();
+            $text = $logModel->getText();
 
             // Query to add the Boebot to the database
-            $query = "INSERT INTO boebot(name) VALUES (?)";
+            $query = "INSERT INTO log(boebot, text) VALUES (?, ?)";
             $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(1, $name);
+            $stmt->bindParam(1, $boebot);
+            $stmt->bindParam(2, $text);
+            $stmt->execute();
+        }
+
+        /**
+         * Function to delete all log items on start grid
+         */
+        public function deleteLog() {
+            // Query to delete all log items
+            $query = "DELETE FROM log";
+            $stmt = $this->conn->prepare($query);
             $stmt->execute();
         }
     }

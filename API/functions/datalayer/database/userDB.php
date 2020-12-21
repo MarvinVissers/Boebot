@@ -33,11 +33,12 @@
             if ($stmt->execute()) {
                 // Getting the user
                 $result = $stmt->fetch(PDO::FETCH_OBJ);
+                var_dump($result);
 
                 // Checking if passwords match
                 if (password_verify($password, $result->password)) {
                     // Gettint the userID and returning it
-                    $userID = $result->ID;
+                    $userID = $result->id;
 
                     return $userID;
                 } else {

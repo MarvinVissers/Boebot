@@ -33,14 +33,14 @@
             if ($validateUsername && $validatePassword) {
                 // Sending the data to the datalayer login function
                 $userID = $this->userDB->userLogin($userModel);
-                $userModel->setID($userID);
+                $userModel->setId($userID);
 
-                echo $userID;
+                echo "Jouw id is = " . $userID . "<br>";
 
                 if ($userModel->getID() != null) {
                     // Starting the session
                     session_start();
-                    $_SESSION['userId'] = $userModel->getID();
+                    $_SESSION['userId'] = $userModel->getId();
 
                     // Sending the user to the home page
                     header("Location: index");
@@ -50,7 +50,7 @@
                 }
             } else {
                 // Reloading the page with an error
-                header("Location: login?error=1");
+                 header("Location: login?error=1");
             }
         }
     }

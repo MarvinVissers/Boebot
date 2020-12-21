@@ -6,9 +6,9 @@
     header("Content-Type: application/json");
 
     // Require the needed files
-    require("obstacle.php");
+    require("log.php");
     require("../../database.php");
-    require("../../../model/obstacle.php");
+    require("../../../model/log.php");
     require("../../../helper/validateAPI.php");
 
     // Making the database connection
@@ -20,7 +20,7 @@
         $selector = $_GET["selector"];
         $token = $_GET["validator"];
         $action = $_GET["action"];
- 
+
         // Linking to validateAPI with the acces key
         $validateAPI = new validateAPI($selector, $token, $conn);
         $validAccesKey = $validateAPI->checkSelecorTokenExist();
@@ -28,7 +28,7 @@
         // Checking if selector and token exist in the database
         if ($validAccesKey) {
             // Calling the obstacleAPI class
-            $obstacleAPI = new ObstacleAPI($conn);
+            $logAPI = new LogAPI($conn);
             // Creating an array to fill later
             $result = array();
 
@@ -36,25 +36,19 @@
             switch ($action) {
                 case "post":
                     // Filling the obstacle model
-                    $obstacleModel = new Obstacle(null, 1, $_GET["row1"], $_GET["column1"], $_GET["row2"], $_GET["column2"]);
-                    // Adding the obstacle to the database
-                    $result = $obstacleAPI->post($obstacleModel);
+                    $logModel = new Log(null, $_GET["boebot"], $_GET["text"]);
+                    // Adding the log to the database
+                    $result = $logAPI->post($logModel);
                     break;
-                case "put":
+                case "getLast":
                     // Filling the obstacle model
-                    $obstacleModel = new Obstacle($_GET["id"], 1, $_GET["row1"], $_GET["column1"], $_GET["row2"], $_GET["column2"]);
-                    // Updating the obstacle to the database
-                    $result = $obstacleAPI->put($obstacleModel);
-                    break;
-                case "delete":
-                    break;
-                case "getObstaclesGrid":
-                    // Filling the obstacle array with all obstacles of 1 grid
-                    $result = $obstacleAPI->getGridObstacles(1);
+                    $logModel = new Log(null, $_GET["boebot"], null);
+                    // Filling the log array with the last log item of the Boebot
+                    $result = $logAPI->getLast($logModel);
                     break;
                 default:
-                    // Filling the obstacle array with all obstacles
-                    $result = $obstacleAPI->getAll();
+                    // Filling the obstacle array with all log items
+                    $result = $logAPI->getAll();
                     break;
             };
 

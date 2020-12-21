@@ -94,6 +94,8 @@
                                             break;
                                     }
                                 }
+
+                                // echo password_hash("wachtwoord", PASSWORD_DEFAULT);
                             ?>
                         </form>
                     </div>

@@ -8,6 +8,7 @@
  * Basic page styling
  * Forms
  * Tables
+ * Modals
  * Buttons
  * Login
  * Index
@@ -73,13 +74,27 @@ html, body {
  * Forms
  * ===========================================================================
  */
+/* Inline form */
+.form--inline {
+    display: flex;
+}
+
 /* Form input */
 .form-control,
 .form-control:focus,
-.form-control:focus-within {
+.form-control:focus-within,
+select {
     color: var(--mainTextColor);
     background-color: var(--secondaryBackground);
     border-color: var(--tertiaryBackground);
+}
+
+.form-control:disabled,
+.form-control[readonly]{
+    color: var(--mainTextColor);
+    background-color: var(--tertiaryBackground);
+    border-color: var(--secondaryBackground);
+    cursor: not-allowed;
 }
 
 /* Form feedback */
@@ -108,6 +123,10 @@ html, body {
     margin-bottom: 5px;
 }
 
+::placeholder {
+    color: var(--mainTextColor);
+}
+
 /*
  * ===========================================================================
  * Tables
@@ -118,12 +137,18 @@ html, body {
     color: var(--mainTextColor);
 }
 
+/* Table hover styling */
+.table-hover tbody tr:hover {
+    color: var(--mainTextColor);
+    background-color: var(--secondaryBackground);
+}
+
 /* Setting the link in the standout color */
 .table__link {
     position: relative;
     display: inline-block;
     width: auto;
-    color: var(--standout);
+    color: var(--mainColor);
     font-size: inherit;
     text-decoration: none;
     text-decoration-skip-ink: none;
@@ -136,14 +161,14 @@ html, body {
     display: block;
     height: 0.1rem;
     width: 0;
-    color: var(--standout);
-    background-color: var(--standout);
+    color: var(--mainColor);
+    background-color: var(--mainColor);
     transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1) 0s;
 }
 
 /* Making sure the link stays the same on hover */
 .table__link:hover {
-    color: var(--standout);
+    color: var(--mainColor);
     text-decoration: none;
     text-decoration-skip-ink: none;
 }
@@ -151,6 +176,31 @@ html, body {
 /* Giving the after full width */
 .table__link:hover::after {
     width: 100%;
+}
+
+/* Align table right */
+.table--right {
+    text-align: right;
+}
+
+/* Small margin for multiple links */
+.talbe--actions {
+    margin-left: 10px;
+}
+
+/*
+ * ===========================================================================
+ * Modals
+ * ===========================================================================
+ */
+.modal-content {
+    background-color: var(--mainBackground);
+}
+
+.close,
+.close:hover,
+.close:focus {
+    color: var(--mainTextColor);
 }
 
 /* 
@@ -173,6 +223,24 @@ html, body {
     color: var(--mainColor);
     background-color: var(--secondaryBackground);
     border-color: var(--mainColor);
+}
+
+/* Danger button */
+.btn-danger,
+.btn-danger:disabled {
+    color: var(--mainTextColor);
+    font-family: var(--secondaryFont);
+    background-color: transparent;
+    border-color: var(--standout);
+}
+
+/* Danger button hover */
+.btn-danger:hover,
+.btn-danger:focus {
+    color: var(--mainTextColor);
+    font-family: var(--secondaryFont);
+    background-color: var(--secondaryBackground);
+    border-color: var(--standout);
 }
 
 /* 
@@ -260,11 +328,6 @@ html, body {
     cursor: pointer;
 }
 
-/* Styling if line has obstacle */
-.grid--obstacle {
-    background-color: var(--standout);
-}
-
 /* Making the first row and the first column invisible */
 /*.grid__row:nth-last-child(1) .grid__line--right,*/
 /*.grid__column:nth-last-child(1) .grid__line--bottom {*/
@@ -302,7 +365,76 @@ html, body {
     background-color: var(--standout);
 }
 
+/* Styling if line has obstacle */
+.grid--obstacle {
+    background-color: var(--standout);
+}
+
+.grid--obstacle:focus,
+.grid--obstacle:hover {
+    background-color: var(--mainTextColor);
+}
+
+/**
+ * Connect Boebot
+ */
 /* Section for connecting new boebots */
 .connect {
     margin-bottom: 50px;
+}
+
+/**
+ * Log
+ */
+/* Log container */
+.log__container {
+    font-family: var(--secondaryFont);
+    background-color: var(--secondaryBackground);
+    padding: 10px;
+    margin-bottom: 25px;
+}
+
+/* Log refresh container */
+.log__actions {
+    text-align: right;
+}
+
+/* Log refresh link */
+.log__refresh {
+    position: relative;
+    display: inline-block;
+    width: auto;
+    color: var(--mainColor);
+    font-size: inherit;
+    text-decoration: none;
+    text-decoration-skip-ink: none;
+}
+
+/* Making an underline under the link that get full with on hover */
+.log__refresh::after {
+    content: '';
+    position: relative;
+    display: block;
+    height: 0.1rem;
+    width: 0;
+    color: var(--mainColor);
+    background-color: var(--mainColor);
+    transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1) 0s;
+}
+
+/* Making sure the link stays the same on hover */
+.log__refresh:hover {
+    color: var(--mainColor);
+    text-decoration: none;
+    text-decoration-skip-ink: none;
+}
+
+/* Giving the after full width */
+.log__refresh:hover::after {
+    width: 100%;
+}
+
+/* Log text */
+.log__text p {
+    margin: 0;
 }

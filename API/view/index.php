@@ -6,27 +6,50 @@
     // Requireing the user controller and user model
     require("../functions/controller/userController.php");
     require("../functions/controller/gridController.php");
+    require("../functions/controller/logController.php");
+    require("../functions/controller/obstacleController.php");
+    require("../functions/controller/routeController.php");
     require("../functions/model/user.php");
     require("../functions/model/grid.php");
+    require("../functions/model/log.php");
 
     // Making instances of the controllers
     $userCtrl = new UserController();
     $gridCtrl = new GridController();
+    $logCtrl = new LogController();
+    $obstacleCtrl = new ObstacleController();
+    $routeCtrl = new RouteController();
 
     $userID = null;
 
-//    // Checking if user is logged in
-//    if (isset($_SESSION['userId'])) {
-//        $userID = $_SESSION['userId'];
-//    } else {
-//        header("Location: login");
-//    }
+    session_start();
+    // Checking if user is logged in
+    if (isset($_SESSION['userId'])) {
+        $userID = $_SESSION['userId'];
+    } else {
+        header("Location: login");
+    }
+
+     // Emptying the log
+    $logCtrl->deleteLog();
 
     // Checking if button of form is pressed
     if (isset($_POST["btnSubmit"])) {
-        // Filling the grid model
-        $gridModel = new Grid(1, null, $_POST["txtRows"], $_POST["txtColumns"]);
+        // Getting the values from the form
+        $rows = $_POST["txtRows"];
+        $columns = $_POST["txtColumns"];
 
+        // Filling the grid model
+        $gridModel = new Grid(1, null, $rows, $columns);
+        // Filling the log model
+        $logModel = new Log(null, "Grid", "Rezise grid to " . $rows . " rows and " . $columns . " columns");
+
+        // Emptying the routes
+        $routeCtrl->removeAllRoutes();
+        // Emptying the obstacles
+        $obstacleCtrl->removeAllObstacles();
+        // Adding the log
+        $logCtrl->addLogItem($logModel);
         // Updating the grid
         $gridCtrl->updateGrid($gridModel);
     }
@@ -66,7 +89,7 @@
 
                     <div class="row">
                         <div class="col-sm-12">
-                            <input type="submit" name="btnSubmit" value="Grid maken" class="btn-primary">
+                            <input type="submit" name="btnSubmit" value="Grid maken" class="btn btn-primary">
                         </div>
                     </div>
                 </form>

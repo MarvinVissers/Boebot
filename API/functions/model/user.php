@@ -9,7 +9,7 @@
         private $password;
 
         /**
-         * Creates a new instance of Time
+         * Creates a new instance of user
          * 
          * @param id id of the user
          * @param username username of the user

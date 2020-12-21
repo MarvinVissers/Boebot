@@ -7,32 +7,52 @@
     require("../functions/controller/userController.php");
     require("../functions/controller/gridController.php");
     require("../functions/controller/BoeBotController.php");
+    require("../functions/controller/logController.php");
+    require("../functions/controller/routeController.php");
+    require("../functions/controller/obstacleController.php");
     require("../functions/model/user.php");
     require("../functions/model/grid.php");
     require("../functions/model/BoeBot.php");
+    require("../functions/model/log.php");
+    require("../functions/model/route.php");
+    require("../functions/model/obstacle.php");
+    require("../functions/model/gridLine.php");
 
     // Making instances of the controllers
     $userCtrl = new UserController();
     $gridCtrl = new GridController();
     $boebotCtrl = new BoeBotController();
+    $logCtrl = new LogController();
+    $routeCtrl = new RouteController();
+    $obstacleCtrl = new ObstacleController();
 
     // Variable for userId to fill later
     $userID = null;
 
-    //    // Checking if user is logged in
-    //    if (isset($_SESSION['userId'])) {
-    //        $userID = $_SESSION['userId'];
-    //    } else {
-    //        header("Location: login");
-    //    }
+    session_start();
+    // Checking if user is logged in
+    if (isset($_SESSION['userId'])) {
+        $userID = $_SESSION['userId'];
+    } else {
+        header("Location: login");
+    }
 
     // Getting the grid
     $gridModel = $gridCtrl->getGrid();
+    $obstacleList = $obstacleCtrl->getObstacles();
 
     // Setting the rows and columns of the grid
     // Minis 1 because else the grid is 1 size to big
-    $rows = $gridModel->getRows() - 1;
-    $columns = $gridModel->getColumns() - 1;
+    $rows = $gridModel->getRows();
+    $columns = $gridModel->getColumns();
+
+    if ($rows >= 1) {
+        $rows--;
+    }
+
+    if ($columns >= 1) {
+        $columns--;
+    }
 
     // Getting the connected Boebots
     $conenctedBoebots = $boebotCtrl->getBoebots();
@@ -46,11 +66,7 @@
         $boebot = new BoeBot(null, $boebotName, null);
 
         // Sending the variables to a function to add the BoeBot to the database
-
-    }
-
-    if (isset($_GET['error'])) {
-        $loginError = $_GET['error'];
+        $boebotCtrl->addBoebot($boebot);
     }
 ?>
 
@@ -64,6 +80,11 @@
     </head>
 
     <body>
+        <script>
+            // Calling a function to fill the log
+            fillLog();
+        </script>
+
         <main class="grid">
             <section class="container">
                 <div class="row">
@@ -95,20 +116,71 @@
                                                         <?php
                                                             // Checking if its the first column
                                                             if ($j == 0) {
+                                                                // Setting the line coordinates
+                                                                $gridLineTop = new GridLine($x0, $y0, $x0, $y1);
+
+                                                                // Checking if the column has a obstacle, if so display in pink and trigger remove modal instead of add modal
+                                                                if ($obstacleCtrl->checkObstacleGrid($gridLineTop, $obstacleList)) {
+                                                                    ?>
+                                                                    <span class="grid__line grid__line--top grid--obstacle" id="top<?php echo $x0 . $y0; ?>" onclick="toggleObstacle('top', <?php echo $x0; ?>, <?php echo $y0; ?>, <?php echo $x0; ?>, <?php echo $y1; ?>)" data-toggle="modal" data-target="#removeObstacle"></span>
+                                                                    <?php
+                                                                } else {
+                                                                    ?>
+                                                                    <span class="grid__line grid__line--top" id="top<?php echo $x0 . $y0; ?>" onclick="toggleObstacle('top', <?php echo $x0; ?>, <?php echo $y0; ?>, <?php echo $x0; ?>, <?php echo $y1; ?>)" data-toggle="modal" data-target="#addObstacle"></span>
+                                                                    <?php
+                                                                }
                                                                 ?>
-                                                                <span class="grid__line grid__line--top" id="top<?php echo $x0 . $y0; ?>" onclick="toggleObstacle('top', <?php echo $x0; ?>, <?php echo $y0; ?>, <?php echo $x0; ?>, <?php echo $x1; ?>)"></span>
+                                                                <input type="hidden" name="txtCoordinatesTop<?php echo $i . $j; ?>" id="coordinatesTop<?php echo $i . $j; ?>" value="<?php echo $x0 . $y0 . $x0 . $y1; ?>">
                                                                 <?php
                                                             }
 
                                                             // Checking if its the first row
                                                             if ($i == 0) {
+                                                                // Setting the line coordinates
+                                                                $gridLineLeft = new GridLine($x0, $y0, $x1, $y0);
+
+                                                                // Checking if the column has a obstacle, if so display in pink and trigger remove modal instead of add modal
+                                                                if ($obstacleCtrl->checkObstacleGrid($gridLineLeft, $obstacleList)) {
+                                                                    ?>
+                                                                    <span class="grid__line grid__line--left grid--obstacle" id="left<?php echo $x0 . $y0; ?>" onclick="toggleObstacle('left', <?php echo $x0; ?>, <?php echo $y0; ?>, <?php echo $x1; ?>, <?php echo $y0; ?>)" data-toggle="modal" data-target="#removeObstacle"></span>
+                                                                    <?php
+                                                                }
                                                                 ?>
-                                                                    <span class="grid__line grid__line--left" id="left<?php echo $x0 . $y0; ?>" onclick="toggleObstacle('left', <?php echo $x0; ?>, <?php echo $y0; ?>, <?php echo $x1; ?>, <?php echo $y0; ?>)"></span>
+                                                                    <span class="grid__line grid__line--left" id="left<?php echo $x0 . $y0; ?>" onclick="toggleObstacle('left', <?php echo $x0; ?>, <?php echo $y0; ?>, <?php echo $x1; ?>, <?php echo $y0; ?>)" data-toggle="modal" data-target="#addObstacle"></span>
+                                                                    <input type="hidden" name="txtCoordinatesLeft<?php echo $i . $j; ?>" id="coordinatesLeft<?php echo $i . $j; ?>" value="<?php echo $x0 . $y0 . $x1 . $y0; ?>">
                                                                 <?php
                                                             }
+
+                                                        // Setting the line coordinates
+                                                        $gridLineBottom = new GridLine($x1, $y0, $x1, $y1);
+
+                                                        // Checking if the column has a obstacle, if so display in pink and trigger remove modal instead of add modal
+                                                        if ($obstacleCtrl->checkObstacleGrid($gridLineBottom, $obstacleList)) {
+                                                            ?>
+                                                            <span class="grid__line grid__line--bottom grid--obstacle" id="bottom<?php echo $x1 . $y0; ?>" onclick="toggleObstacle('bottom', <?php echo $x1; ?>, <?php echo $y0; ?>, <?php echo $x1; ?>, <?php echo $y1; ?>)" data-toggle="modal" data-target="#removeObstacle"></span>
+                                                            <?php
+                                                        } else {
+                                                            ?>
+                                                            <span class="grid__line grid__line--bottom" id="bottom<?php echo $x1 . $y0; ?>" onclick="toggleObstacle('bottom', <?php echo $x1; ?>, <?php echo $y0; ?>, <?php echo $x1; ?>, <?php echo $y1; ?>)" data-toggle="modal" data-target="#addObstacle"></span>
+                                                            <?php
+                                                        }
+
+                                                        // Setting the line coordinates
+                                                        $gridLineRight = new GridLine($x0, $y1, $x1, $y1);
+
+                                                        // Checking if the column has a obstacle, if so display in pink and trigger remove modal instead of add modal
+                                                        if ($obstacleCtrl->checkObstacleGrid($gridLineRight, $obstacleList)) {
+                                                            ?>
+                                                            <span class="grid__line grid__line--right grid--obstacle" id="right<?php echo $x0 . $y1; ?>" onclick="toggleObstacle('right', <?php echo $x0; ?>, <?php echo $y1; ?>, <?php echo $x1; ?>, <?php echo $y1; ?>)" data-toggle="modal" data-target="#removeObstacle"></span>
+                                                            <?php
+                                                        } else {
+                                                            ?>
+                                                            <span class="grid__line grid__line--right" id="right<?php echo $x0 . $y1; ?>" onclick="toggleObstacle('right', <?php echo $x0; ?>, <?php echo $y1; ?>, <?php echo $x1; ?>, <?php echo $y1; ?>)" data-toggle="modal" data-target="#addObstacle"></span>
+                                                            <?php
+                                                        }
                                                         ?>
-                                                        <span class="grid__line grid__line--bottom" id="bottom<?php echo $x1 . $y0; ?>" onclick="toggleObstacle('bottom', <?php echo $x1; ?>, <?php echo $y0; ?>, <?php echo $x1; ?>, <?php echo $y1; ?>)"></span>
-                                                        <span class="grid__line grid__line--right" id="right<?php echo $x0 . $y1; ?>" onclick="toggleObstacle('right', <?php echo $x0; ?>, <?php echo $y1; ?>, <?php echo $x1; ?>, <?php echo $y1; ?>)"></span>
+                                                        <input type="hidden" name="txtCoordinatesBottom<?php echo $i . $j; ?>" id="coordinatesBottom<?php echo $i . $j; ?>" value="<?php echo $x1 . $y0 . $x1 . $y1; ?>">
+                                                        <input type="hidden" name="txtCoordinatesRight<?php echo $i . $j; ?>" id="coordinatesRight<?php echo $i . $j; ?>" value="<?php echo $x0 . $y1 . $x1 . $y1; ?>">
                                                     </div>
                                                 <?php
                                                 }
@@ -123,7 +195,7 @@
 
                 <section class="actions">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <form action="" method="post" class="connect">
                                 <div class="row">
                                     <div class="col-sm-12">
@@ -132,24 +204,23 @@
 
                                     <div class="col-sm-12">
                                         <label for="boebotIP">BoeBot name</label>
-                                        <input type="text" name="txtBoeBot" class="form-control" id="boebotIP" minlength="1" maxlength="25" placeholder="Like rpb-ada14" required>
-                                        <span id="usernameFeedback" class="form__feedback"></span>
+                                        <input type="text" name="txtBoeBot" class="form-control" id="boebotIP" minlength="1" maxlength="25" placeholder="Like ada-rbp-14" required>
+                                        <span id="boebotNameFeedback" class="form__feedback"></span>
                                     </div>
 
                                     <div class="col-sm-12">
-                                        <input type="submit" name="btnSubmitConnect" value="Add Boebot" class="btn-primary">
+                                        <input type="submit" name="btnSubmitConnect" value="Add Boebot" class="btn btn-primary">
                                     </div>
                                 </div>
                             </form>
 
                             <h2 class="connected">Connected Boebots</h2>
 
-                            <table class="table table-hover">
+                            <table class="table">
                                 <thead>
                                 <tr class="table__row">
                                     <th class="table__head">BoeBot</th>
-                                    <th class="table__head">Status</th>
-                                    <th class="table__head">Actions</th>
+                                    <th class="table__head table--right">Actions</th>
                                 </tr>
                                 </thead>
 
@@ -159,8 +230,10 @@
                                         ?>
                                         <tr class="table__row">
                                             <td class="table__td"><?php echo $boebot->getName(); ?></td>
-                                            <td class="table__td"><?php echo $boebot->getStatus(); ?></td>
-                                            <td class="table__td"></td>
+                                            <td class="table__td table--right">
+                                                <a href="javascript:void(0)" class="table__link talbe--actions" onclick="setBoebotInModal('<?php echo $boebot->getName(); ?>')" data-toggle="modal" data-target="#testBoebot">Test BoeBot</a>
+                                                <a href="javascript:void(0)" class="table__link talbe--actions" onclick="setBoebotInModal('<?php echo $boebot->getName(); ?>')" data-toggle="modal" data-target="#chooseBoebot">Choose route</a>
+                                            </td>
                                         </tr>
                                         <?php
                                     }
@@ -169,13 +242,17 @@
                             </table>
                         </div>
 
-                        <div class="col-sm-6">
-                            <h2 class="log">log</h2>
+                        <div class="col-md-8">
+                            <h2 class="log">Log</h2>
 
                             <div class="log__container">
-                                <div class="log__text" id="logText">
-                                    <!-- TODO gekke API calls -->
+                                <div class="log__actions">
+                                    <a href="javascript:void(0)" class="log__refresh" onclick="refreshLog()">Refresh log</a>
                                 </div>
+
+                                <div class="log__text" id="logText">
+                                    <!-- Paragraph for the API log -->
+                                    <p id="log"></p>
                             </div>
                         </div>
                     </div>
@@ -183,32 +260,15 @@
             </section>
         </main>
 
-        <!-- Linking to javascript -->
-        <script src="../assets/script/validation.js"></script>
+        <?php
+            // Including the modals
+            require("include/addObstacleModal.php");
+            require("include/removeObstacleModal.php");
+            require("include/testBoebotModal.php");
+            require("include/routeBoebotModal.php");
+        ?>
 
-        <script>
-            /**
-             * Function to set a obstacle on the grid and save it in the database
-             * @param direction the direction on the grid
-             * @param x1 the starting point from top to bottom
-             * @param y1 the starting point from left to right
-             * @param x2 the end point from top to bottom
-             * @param y2 the end point from left to right
-             */
-            // function toggleObstacle(direction, x1, y1, x2, y2) {
-            //     // Setting the line active
-            //     document.getElementById(direction + x1 + y1).classList.toggle("grid--obstacle");
-            //
-            //     // Filling the url
-            //     var url = "https://bp6.adainforma.tk/helloworldbot/functions/datalayer/api/obstacle/?selector=ae026dd58cd57fd2&validator=4424bdd85905aa88646327911b6893598a279abb4f82466dca61a988041afb08&action=post&row1=" + x1 + "&column1=" + y1 + "&row2=" + x2 + "&column2=" + y2;
-            //     console.log(url);
-            //
-            //     // Posting the data to the API
-            //     var xhttp = new XMLHttpRequest();
-            //     xhttp.open("POST", url, true);
-            //     xhttp.setRequestHeader("Content-type", "application/json");
-            //     xhttp.send();
-            // }
-        </script>
+        <!-- Linking to javascript -->
+        <script src="../assets/script/main.js"></script>
     </body>
 </html>
