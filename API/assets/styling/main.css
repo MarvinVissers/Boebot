@@ -1,0 +1,442 @@
+/* 
+ * ===========================================================================
+ * Index 
+ * ===========================================================================
+ *
+ *
+ * Variabels
+ * Basic page styling
+ * Forms
+ * Tables
+ * Modals
+ * Buttons
+ * Login
+ * Index
+ * Grid
+ */
+
+/* 
+ * ===========================================================================
+ * Variabels 
+ * ===========================================================================
+ */
+:root {
+    /* Main colors */
+    --mainColor: #27e8a7;
+    --mainBackground: #232937;
+    --mainTextColor: #e4f0fb;
+    /* Secondary colors */
+    --secondaryColor: #32ae85;
+    --secondaryBackground: #506477;
+    --secondaryTextColor: #add7ff;
+    /* Tertiary colors */
+    --tertiaryColor: #42675a;
+    --tertiaryBackground: #7390aa;
+    --tertiaryTextColor: #91b4d5;
+    /* Standout colors */
+    --standout: #df4576;
+
+    /* Fonts */
+    --mainFont: "Roboto", sans-serif;
+    --secondaryFont: "Roboto Mono", monospace;
+}
+
+/* 
+ * ===========================================================================
+ * Basic page styling 
+ * ===========================================================================
+ */
+html, body {
+    position: relative;
+    height: auto;
+    max-height: 100%;
+    width: 100%;
+    font-size: 1em;
+    font-family: var(--mainFont);
+    color: var(--mainTextColor);
+    background-color: var(--mainBackground);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+  
+/* Selection styling */
+::-moz-selection {
+    color: var(--mainTextColor);
+    background-color: var(--standout);
+}
+::selection {
+    color: var(--mainTextColor);
+    background-color: var(--standout);
+}
+
+/* 
+ * ===========================================================================
+ * Forms
+ * ===========================================================================
+ */
+/* Inline form */
+.form--inline {
+    display: flex;
+}
+
+/* Form input */
+.form-control,
+.form-control:focus,
+.form-control:focus-within,
+select {
+    color: var(--mainTextColor);
+    background-color: var(--secondaryBackground);
+    border-color: var(--tertiaryBackground);
+}
+
+.form-control:disabled,
+.form-control[readonly]{
+    color: var(--mainTextColor);
+    background-color: var(--tertiaryBackground);
+    border-color: var(--secondaryBackground);
+    cursor: not-allowed;
+}
+
+/* Form feedback */
+.form__feedback {
+    display: block;
+    height: 1.2rem;
+    margin: 0.5rem 0 1rem;
+    color: var(--standout);
+    font-size: 0.8rem;
+}
+
+/* Form input feedback good */
+.input--good {
+    border-color: var(--mainColor);
+}
+
+/* Form input feedback bad */
+.input--bad {
+    border-color: var(--standout);
+}
+
+/* Aligning button on the bottom of column */
+.form--align-bottom {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 5px;
+}
+
+::placeholder {
+    color: var(--mainTextColor);
+}
+
+/*
+ * ===========================================================================
+ * Tables
+ * ===========================================================================
+ */
+/* Setting table color on white */
+.table {
+    color: var(--mainTextColor);
+}
+
+/* Table hover styling */
+.table-hover tbody tr:hover {
+    color: var(--mainTextColor);
+    background-color: var(--secondaryBackground);
+}
+
+/* Setting the link in the standout color */
+.table__link {
+    position: relative;
+    display: inline-block;
+    width: auto;
+    color: var(--mainColor);
+    font-size: inherit;
+    text-decoration: none;
+    text-decoration-skip-ink: none;
+}
+
+/* Making an underline under the link that get full with on hover */
+.table__link::after {
+    content: '';
+    position: relative;
+    display: block;
+    height: 0.1rem;
+    width: 0;
+    color: var(--mainColor);
+    background-color: var(--mainColor);
+    transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1) 0s;
+}
+
+/* Making sure the link stays the same on hover */
+.table__link:hover {
+    color: var(--mainColor);
+    text-decoration: none;
+    text-decoration-skip-ink: none;
+}
+
+/* Giving the after full width */
+.table__link:hover::after {
+    width: 100%;
+}
+
+/* Align table right */
+.table--right {
+    text-align: right;
+}
+
+/* Small margin for multiple links */
+.talbe--actions {
+    margin-left: 10px;
+}
+
+/*
+ * ===========================================================================
+ * Modals
+ * ===========================================================================
+ */
+.modal-content {
+    background-color: var(--mainBackground);
+}
+
+.close,
+.close:hover,
+.close:focus {
+    color: var(--mainTextColor);
+}
+
+/* 
+ * ===========================================================================
+ * Buttons
+ * ===========================================================================
+ */
+ /* Primary button */
+.btn-primary,
+.btn-primary:disabled {
+    color: var(--mainColor);
+    font-family: var(--secondaryFont);
+    background-color: transparent;
+    border-color: var(--mainColor);
+}
+
+ /* Primary button hover */
+.btn-primary:hover,
+.btn-primary:focus {
+    color: var(--mainColor);
+    background-color: var(--secondaryBackground);
+    border-color: var(--mainColor);
+}
+
+/* Danger button */
+.btn-danger,
+.btn-danger:disabled {
+    color: var(--mainTextColor);
+    font-family: var(--secondaryFont);
+    background-color: transparent;
+    border-color: var(--standout);
+}
+
+/* Danger button hover */
+.btn-danger:hover,
+.btn-danger:focus {
+    color: var(--mainTextColor);
+    font-family: var(--secondaryFont);
+    background-color: var(--secondaryBackground);
+    border-color: var(--standout);
+}
+
+/* 
+ * ===========================================================================
+ * Login 
+ * ===========================================================================
+ */
+/* Login container */
+.login {
+    margin-top: 5%;
+}
+
+/* Login title */
+.login__title {
+    color: var(--mainColor);
+    padding-bottom: .5em;
+}
+
+/* 
+ * ===========================================================================
+ * Index 
+ * ===========================================================================
+ */
+/* Index container */
+.index {
+    margin-top: 5%;
+}
+
+/* Index title */
+.index__title {
+    color: var(--mainColor);
+    padding-bottom: .5em;
+}
+
+/* 
+ * ===========================================================================
+ * Grid 
+ * ===========================================================================
+ */
+/* Grid container */
+.grid {
+    margin-top: 5%;
+}
+
+/* Grid title */
+.grid__title {
+    color: var(--mainColor);
+    padding-bottom: .5em;
+}
+
+/* Grid container */
+.grid__map {
+    display: flex;
+    flex-direction: row;
+    color: var(--mainColor);
+    background-color: var(--secondaryBackground);
+    margin-bottom: 50px;
+    padding: 10px;
+}
+
+/* Row in the grid container */
+.grid__row {
+    display: flex;
+    flex-direction: column;
+    min-height: 50px;
+    height: 100%;
+    min-width: 50px;
+    width: 100%;
+}
+
+/* Columns in a row of the grid container */
+.grid__column {
+    position: relative;
+    min-height: 50px;
+    height: 100%;
+    width: 100%;
+}
+
+/* Grid line styling */
+.grid__line {
+    position: absolute;
+    min-height: 10px;
+    min-width: 10px;
+    background-color: var(--mainColor);
+    cursor: pointer;
+}
+
+/* Making the first row and the first column invisible */
+/*.grid__row:nth-last-child(1) .grid__line--right,*/
+/*.grid__column:nth-last-child(1) .grid__line--bottom {*/
+    /*display: none;*/
+/*}*/
+
+/* Top grid line */
+.grid__line--top {
+    top: 0;
+    width: 100%;
+}
+
+/* Left grid line */
+.grid__line--left {
+    left: 0;
+    height: 100%;
+}
+
+/* Bottom grid line */
+.grid__line--bottom {
+    bottom: 0;
+    width: 100%;
+}
+
+/* Right grid line */
+.grid__line--right {
+    right: 0;
+    height: 100%;
+}
+
+/* Hover over grid row and grid column */
+.grid__line:hover,
+.grid__line:focus {
+    color: var(--standout);
+    background-color: var(--standout);
+}
+
+/* Styling if line has obstacle */
+.grid--obstacle {
+    background-color: var(--standout);
+}
+
+.grid--obstacle:focus,
+.grid--obstacle:hover {
+    background-color: var(--mainTextColor);
+}
+
+/**
+ * Connect Boebot
+ */
+/* Section for connecting new boebots */
+.connect {
+    margin-bottom: 50px;
+}
+
+/**
+ * Log
+ */
+/* Log container */
+.log__container {
+    font-family: var(--secondaryFont);
+    background-color: var(--secondaryBackground);
+    padding: 10px;
+    margin-bottom: 25px;
+}
+
+/* Log refresh container */
+.log__actions {
+    text-align: right;
+}
+
+/* Log refresh link */
+.log__refresh {
+    position: relative;
+    display: inline-block;
+    width: auto;
+    color: var(--mainColor);
+    font-size: inherit;
+    text-decoration: none;
+    text-decoration-skip-ink: none;
+}
+
+/* Making an underline under the link that get full with on hover */
+.log__refresh::after {
+    content: '';
+    position: relative;
+    display: block;
+    height: 0.1rem;
+    width: 0;
+    color: var(--mainColor);
+    background-color: var(--mainColor);
+    transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1) 0s;
+}
+
+/* Making sure the link stays the same on hover */
+.log__refresh:hover {
+    color: var(--mainColor);
+    text-decoration: none;
+    text-decoration-skip-ink: none;
+}
+
+/* Giving the after full width */
+.log__refresh:hover::after {
+    width: 100%;
+}
+
+/* Log text */
+.log__text p {
+    max-height: 350px;
+    margin: 25px 0 0;
+    overflow: auto;
+}
