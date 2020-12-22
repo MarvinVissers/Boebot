@@ -74,7 +74,7 @@ public class RouteController {
     public Node getGridSize() {
         try {
             // Setting to URL to post to
-            URL apiLink = new URL("https://bp6.adainforma.tk/helloworldbot/functions/datalayer/api/?selector=ae026dd58cd57fd2&validator=4424bdd85905aa88646327911b6893598a279abb4f82466dca61a988041afb08");
+            URL apiLink = new URL("https://bp6.adainforma.tk/helloworldbot/functions/datalayer/api/grid/?selector=ae026dd58cd57fd2&validator=4424bdd85905aa88646327911b6893598a279abb4f82466dca61a988041afb08");
             // Opening the file
             URLConnection apiConnection = apiLink.openConnection();
             // Reading the file

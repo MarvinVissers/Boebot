@@ -1,13 +1,11 @@
 package Controller;
 
 import Model.Node;
-import Model.Obstacle;
 import TI.BoeBot;
 import TI.Servo;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,7 +28,7 @@ public class BoeBotController {
 //        BoeBot.wait(200);
 //        BoeBot.digitalWrite(15, false);
 //        BoeBot.wait(200);
-        controlLed(15, 200, iLoops);
+        controlLed(14, 200, iLoops);
     }
 
     public void KnipperRechts(int iLoops){
@@ -61,13 +59,13 @@ public class BoeBotController {
 //         // TODO post naar api
 //    }
 
-    public ArrayList<Node> Astar( ArrayList<int[]> obstacleCoordinates) throws UnknownHostException {
+    public ArrayList<Node> Astar(ArrayList<int[]> obstacleCoordinates, Node gridSize) throws UnknownHostException {
         ArrayList<Node> Cordinaten = new ArrayList<>();
        // System.out.println(Arrays.deepToString(obstacleCoordinates.toArray()));
         Node initialNode = new Node(0, 0);
-        Node finalNode = new Node(10, 12);
-        int rows = 15;
-        int cols = 15;
+        Node finalNode = new Node(8, 8);
+        int rows = gridSize.getRow();
+        int cols = gridSize.getCol();
         AStar aStar = new AStar(rows, cols, initialNode, finalNode);
         //blocksArray = new int[][]{{1, 3}, {2, 3}, {3, 3}};
         aStar.setBlocks(obstacleCoordinates);
@@ -134,14 +132,6 @@ public class BoeBotController {
             // Activating the emergency brakes
             emergencyBrake();
         }
-    }
-
-    public void detectObject(){
-        BoeBot.digitalWrite(14, true);
-        BoeBot.wait(1);
-        BoeBot.digitalWrite(14, false);
-        int pulseLength = BoeBot.pulseIn(13, true, 10000) / 58;
-        System.out.println(pulseLength);
     }
 
     public void turnDegrees(int degrees, int turningSpeed) {

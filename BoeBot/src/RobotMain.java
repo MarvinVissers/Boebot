@@ -44,7 +44,7 @@ public class RobotMain {
         LogController logCtrl = new LogController("log");
         RouteController routeCtrl = new RouteController();
         BoeBotController BoeController = new BoeBotController();
-        BoeBot.digitalWrite(15,false);
+        BoeBot.digitalWrite(14,false);
         BoeBot.digitalWrite(2,false);
 
         /**
@@ -79,8 +79,7 @@ public class RobotMain {
         Log log = new Log(null, null, "Opstarten Boebot");
         logCtrl.post(log);
 //        ArrayList<int[]> Route = BoeController.Astar(obstacleCoordinates);
-        ArrayList<Node> Route = BoeController.Astar(obstacleCoordinates);
-
+        ArrayList<Node> Route = BoeController.Astar(obstacleCoordinates,routeCtrl.getGridSize());
 //        BoeBot.wait(10000);
         Slink.update(iNormalSpeed - iRaceSpeed);
         Srechts.update(iNormalSpeed + iRaceSpeed);
@@ -218,7 +217,8 @@ public class RobotMain {
              * Drive route logic
              */
             // Getting the fastest route
-            BoeController.Astar(obstacleCoordinates);
+            BoeController.Astar(obstacleCoordinates, routeCtrl.getGridSize());
+           // System.out.println(BoeController.Astar(obstacleCoordinates, routeCtrl.getGridSize()));
             BoeBot.wait(1000);
 
             // Reading out the line followers
