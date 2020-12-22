@@ -1,17 +1,19 @@
 package Controller;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
-import java.net.*;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import Model.Log;
 
-import Model.Obstacle;
 import json.*;
+
+/**
+ * @author Marvin Vissers
+ */
 
 public class LogController extends ApiRequest {
     /**
@@ -30,7 +32,44 @@ public class LogController extends ApiRequest {
      */
     @Override
     public ArrayList<Object> get() {
-        return null;
+        // Creating an ArrayList to fill
+        ArrayList<Object> listLogs = new ArrayList<>();
+
+        try {
+            // Setting to URL to post to
+            URL apiLink = new URL(this.baseURL + "&action=get&boebot=" + this.sIpAdres);
+            // Opening the file
+            URLConnection apiConnection = apiLink.openConnection();
+            // Reading the file
+            BufferedReader result = new BufferedReader(new InputStreamReader(apiConnection.getInputStream()));
+
+            // String for the given JSON
+            String inputLine;
+            // Looping through the JSON
+            while ((inputLine = result.readLine()) != null) {
+                // Creating an array of the result
+                JsonArray json = Json.parse(inputLine).asArray();
+
+                // Looping through the result
+                for (Object o : json) {
+                    // Converting the array to an Object
+                    JsonObject obj = (JsonObject) o;
+
+                    // Getting the values
+                    int iId = Integer.parseInt(removeQuotes(obj.get("id")));
+                    String sText = (removeQuotes(obj.get("text")));
+
+                    // Filling the listLogs array
+                    listLogs.add(new Log(iId, this.sIpAdres, sText));
+                }
+            }
+        } catch (Exception e) {
+            // Printing the error
+            System.out.println(e);
+        }
+
+        // Returning list with all logs items
+        return listLogs;
     }
 
     /**
@@ -66,6 +105,10 @@ public class LogController extends ApiRequest {
         }
     }
 
+    /**
+     * Function so the log model doesn't need te be given in order to post a log
+     * @param sText the text of the log item
+     */
     public void postLog(String sText) {
         // Creating an log object
         Log log = new Log(null, this.sIpAdres, sText);
@@ -74,10 +117,14 @@ public class LogController extends ApiRequest {
         post(log);
     }
 
+    /**
+     * Getting the last log items given for a Boebot
+     * @return the last log text in the API
+     */
     public String getLastLog() {
         try {
             // Setting to URL to post to
-            URL apiLink = new URL(this.baseURL + "&action=get&boebot=" + this.sIpAdres);
+            URL apiLink = new URL(this.baseURL + "&action=getLast&boebot=" + this.sIpAdres);
             // Opening the file
             URLConnection apiConnection = apiLink.openConnection();
             // Reading the file
@@ -102,8 +149,6 @@ public class LogController extends ApiRequest {
                     // Filling the Log model
                     Log log = new Log(iId, this.sIpAdres, sText);
 
-                    System.out.println(sText);
-
                     // Returning the last log
                     return log.getText();
                 }
@@ -113,6 +158,55 @@ public class LogController extends ApiRequest {
             System.out.println(e);
         }
         // Returning nothing
+        return null;
+    }
+
+    /**
+     * Function to check the action of the last log item
+     * @param sLogText the text of the the last log item
+     * @return the action of the last log item
+     */
+    public String checkLogAction(String sLogText) {
+        // Setting the log text to uppercase to better check. test will be TEST
+        String sLogTextUpper = sLogText.toUpperCase();
+
+        // Checking if log text contains the words test, or drive from
+        // Drive from for driving route
+        if (sLogTextUpper.contains("TEST")) {
+            // Seeing wich element(s) need to be tested
+            return checkTestAction(sLogTextUpper);
+        } else if (sLogTextUpper.contains("DRIVE FROM")) {
+            return "route";
+        } else {
+            // Nothing found
+            return null;
+        }
+    }
+
+    /**
+     * Function to check wich test needs to be done
+     * @param sLogText the text of the log
+     * @return the string with the text
+     */
+    private String checkTestAction(String sLogText) {
+        // Checking wich test needs to be done
+        if (sLogText.contains("TEST ALL")) {
+            return "testAll";
+        } else if (sLogText.contains("TURN RIGHT")) {
+            return "testTurnRight";
+        } else if (sLogText.contains("TURN LEFT")) {
+            return "testTurnLeft";
+        } else if (sLogText.contains(("DRIVE BACKWARD"))) {
+            return "testDriveBackward";
+        } else if (sLogText.contains("DRIVE FORWARD")) {
+            return "testDriveForward";
+        } else if (sLogText.contains("LIGHT RIGHT")) {
+            return "testLightRight";
+        } else if (sLogText.contains("LIGHT LEFT")) {
+            return  "testLightLeft";
+        }
+
+        // Returning nothing if nothing is found
         return null;
     }
 }

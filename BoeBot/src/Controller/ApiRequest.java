@@ -8,6 +8,10 @@ import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+/**
+ * @author Marvin Vissers
+ */
+
 abstract class ApiRequest {
     // Variable for the base url of the API
     protected String baseURL, sMap;

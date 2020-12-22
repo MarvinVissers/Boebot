@@ -2,13 +2,24 @@ package Controller;
 
 import Model.Node;
 import Model.Route;
+import json.Json;
+import json.JsonArray;
+import json.JsonObject;
+import json.JsonValue;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+
+/**
+ * @author Rick Deurloo
+ * @author Marvin Vissers
+ */
 
 public class RouteController {
 
-    public RouteController() {
+    public RouteController () {
 
     }
 
@@ -19,7 +30,7 @@ public class RouteController {
      */
     public Route DriveRoute(Route route) {
         // Checking if there is a new point for the Boebot to drive to
-        if(route.getOffset() < route.getListCoordinates().size()) {
+        if (route.getOffset() < route.getListCoordinates().size()) {
             // Setting the new point to drive to
             Node routeOffset = route.getListCoordinates().get(route.getOffset());
 
@@ -37,8 +48,8 @@ public class RouteController {
             } else if (route.getLastCoordinates().getCol() > routeOffset.getCol()) {
                 // Setting the new direction
                 route.setDirection("Down");
-            } else {
-                System.out.println("Oof");
+            } if (route.getLastCoordinates().getRow() < routeOffset.getRow() && route.getLastCoordinates().getCol() == routeOffset.getCol()) {
+                // Do something
             }
 
             // Updating the offset
@@ -47,15 +58,68 @@ public class RouteController {
 
             // Updating the last coordinates
             route.setLastCoordinates(routeOffset);
-
-            // Giving back the new route
-            return route;
         } else {
             // Setting the result to done
             route.setResult(1);
-
-            // Giving back the route
-            return route;
         }
+
+        // Giving back the route
+        return route;
+    }
+
+    /**
+     * Function to get grid size from the API
+     * @return an object with the size of the grid
+     */
+    public Node getGridSize() {
+        try {
+            // Setting to URL to post to
+            URL apiLink = new URL("https://bp6.adainforma.tk/helloworldbot/functions/datalayer/api/?selector=ae026dd58cd57fd2&validator=4424bdd85905aa88646327911b6893598a279abb4f82466dca61a988041afb08");
+            // Opening the file
+            URLConnection apiConnection = apiLink.openConnection();
+            // Reading the file
+            BufferedReader result = new BufferedReader(new InputStreamReader(apiConnection.getInputStream()));
+
+            // String for the given JSON
+            String inputLine;
+            // Looping through the JSON
+            while ((inputLine = result.readLine()) != null) {
+                // Creating an array of the result
+                JsonArray json = Json.parse(inputLine).asArray();
+
+                // Looping through the result
+                for (Object o : json) {
+                    // Converting the array to an Object
+                    JsonObject obj = (JsonObject) o;
+
+                    // Getting the values
+                    int iRows = Integer.parseInt(removeQuotes(obj.get("rows")));
+                    int iColumns = Integer.parseInt(removeQuotes(obj.get("columns")));
+
+                    // Filling the Node object
+                    Node grid = new Node(iRows, iColumns);
+
+                    // Returning thr node
+                    return grid;
+                }
+            }
+        } catch (Exception e) {
+            // Printing the error
+            System.out.println(e);
+        }
+
+        // Returning nothing
+        return null;
+    }
+
+    /**
+     * Function to remove quotes from the JsonValue String
+     * @param sJsonValue the gotton value of the API
+     */
+    public String removeQuotes(JsonValue sJsonValue) {
+        // Remvoing the quotes from the JsonValue
+        String sStringJsonValue = sJsonValue.toString().replace("\"", "");
+
+        return sStringJsonValue;
     }
 }
