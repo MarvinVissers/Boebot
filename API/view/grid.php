@@ -242,7 +242,7 @@
                             </table>
                         </div>
 
-                        <div class="col-md-8">
+                        <div class="col-md-8" id="logPart">
                             <h2 class="log">Log</h2>
 
                             <div class="log__container">

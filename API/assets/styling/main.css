@@ -436,5 +436,7 @@ select {
 
 /* Log text */
 .log__text p {
-    margin: 0;
+    max-height: 350px;
+    margin: 25px 0 0;
+    overflow: auto;
 }

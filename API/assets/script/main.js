@@ -93,5 +93,6 @@ function toggleObstacle(direction, x1, y1, x2, y2) {
  */
 function refreshLog() {
     // Reloading the page to load the new log
-    location.reload();
+    window.location = "logPart"
+    window.location.reload(true);
 }
