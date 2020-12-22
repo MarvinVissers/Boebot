@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.Node;
+import Model.SFNodes;
 import TI.BoeBot;
 import TI.Servo;
 
@@ -59,11 +60,11 @@ public class BoeBotController {
 //         // TODO post naar api
 //    }
 
-    public ArrayList<Node> Astar(ArrayList<int[]> obstacleCoordinates, Node gridSize) throws UnknownHostException {
+    public ArrayList<Node> Astar(ArrayList<int[]> obstacleCoordinates, Node gridSize, SFNodes sfNodes) throws UnknownHostException {
         ArrayList<Node> Cordinaten = new ArrayList<>();
        // System.out.println(Arrays.deepToString(obstacleCoordinates.toArray()));
-        Node initialNode = new Node(0, 0);
-        Node finalNode = new Node(8, 8);
+        Node initialNode = new Node(sfNodes.getStartNodes(),sfNodes.getStartColumn());
+        Node finalNode = new Node(sfNodes.getFinishNodes(), sfNodes.getFinishColumn());
         int rows = gridSize.getRow();
         int cols = gridSize.getCol();
         AStar aStar = new AStar(rows, cols, initialNode, finalNode);

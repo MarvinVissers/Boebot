@@ -2,6 +2,7 @@ package Controller;
 
 import Model.Node;
 import Model.Route;
+import Model.SFNodes;
 import json.Json;
 import json.JsonArray;
 import json.JsonObject;
@@ -9,8 +10,10 @@ import json.JsonValue;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 
 /**
  * @author Rick Deurloo
@@ -111,6 +114,50 @@ public class RouteController {
         // Returning nothing
         return null;
     }
+
+    public SFNodes GetSFNodes() {
+        try {
+            // Setting to URL to post to
+            InetAddress inetAddress = InetAddress.getLocalHost();
+            URL apiLink = new URL("https://bp6.adainforma.tk/helloworldbot/functions/datalayer/api/route/?selector=ae026dd58cd57fd2&validator=4424bdd85905aa88646327911b6893598a279abb4f82466dca61a988041afb08&boebot="+inetAddress.getHostName());
+            // Opening the file
+            URLConnection apiConnection = apiLink.openConnection();
+            // Reading the file
+            BufferedReader result = new BufferedReader(new InputStreamReader(apiConnection.getInputStream()));
+
+            // String for the given JSON
+            String inputLine;
+            // Looping through the JSON
+            while ((inputLine = result.readLine()) != null) {
+                // Creating an array of the result
+                JsonArray json = Json.parse(inputLine).asArray();
+
+                // Looping through the result
+                for (Object o : json) {
+                    // Converting the array to an Object
+                    JsonObject obj = (JsonObject) o;
+
+                    // Getting the values
+                    int iRows = Integer.parseInt(removeQuotes(obj.get("row1")));
+                    int iColumns = Integer.parseInt(removeQuotes(obj.get("column1")));
+                    int iRows2 = Integer.parseInt(removeQuotes(obj.get("row2")));
+                    int iColumns2 = Integer.parseInt(removeQuotes(obj.get("column2")));
+
+                    SFNodes SfNodes = new SFNodes(iRows,iColumns,iRows2,iColumns2);
+
+                    // Returning thr node
+                    return SfNodes;
+                }
+            }
+        } catch (Exception e) {
+            // Printing the error
+            System.out.println(e);
+        }
+
+        // Returning nothing
+        return null;
+    }
+
 
     /**
      * Function to remove quotes from the JsonValue String
