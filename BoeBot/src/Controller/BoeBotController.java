@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author Rick Deurloo
+ * @author Marvin Vissers
+ */
+
 public class BoeBotController {
 
     private Servo sLinks;
@@ -20,27 +25,45 @@ public class BoeBotController {
         this.sRechts = new Servo(13);
     }
     
-//    public void KnipperLinks(){
+    public void KnipperLinks(int iLoops){
 //        BoeBot.digitalWrite(15, true);
 //        BoeBot.wait(200);
 //        BoeBot.digitalWrite(15, false);
 //        BoeBot.wait(200);
-//    }
-//
-//    public void KnipperRechts(){
+        controlLed(15, 200, iLoops);
+    }
+
+    public void KnipperRechts(int iLoops){
 //        BoeBot.digitalWrite(2, true);
 //        BoeBot.wait(200);
 //        BoeBot.digitalWrite(2, false);
 //        BoeBot.wait(200);
-//    }
-//
+        controlLed(2, 200, iLoops);
+    }
+
+    /**
+     * Hee Rick Marvin hier met een super onnodige functie die misschien wel handig is
+     * @param iLed de led die aan en uit moet
+     * @param iWait de wachttijd tussen het knipperen
+     * @param iLoops hoevaak de loop wordt uitgevoerd
+     */
+    private void controlLed(int iLed, int iWait, int iLoops) {
+       for (int i = 0; i < iLoops; i++) {
+           BoeBot.digitalWrite(iLed, true);
+           BoeBot.wait(iWait);
+           BoeBot.digitalWrite(iLed, false);
+           BoeBot.wait(iWait);
+       }
+    }
+
 //    public void ObstacleDetect(){
 //        BoeBot.freqOut(0,1000,1000);
+//         // TODO post naar api
 //    }
 
     public ArrayList<Node> Astar( ArrayList<int[]> obstacleCoordinates) throws UnknownHostException {
         ArrayList<Node> Cordinaten = new ArrayList<>();
-        // System.out.println(Arrays.deepToString(obstacleCoordinates.toArray()));
+       // System.out.println(Arrays.deepToString(obstacleCoordinates.toArray()));
         Node initialNode = new Node(0, 0);
         Node finalNode = new Node(10, 12);
         int rows = 15;
@@ -53,6 +76,64 @@ public class BoeBotController {
             Cordinaten.add(new Node(node.getRow(), node.getCol()));
         }
         return Cordinaten;
+    }
+
+    /**
+     * Function to go past every test function
+     */
+    public void testAll() {
+        // Setting a waiting time between the test functions
+        int iWait = 500;
+
+        // The lights
+        KnipperLinks(5);
+        BoeBot.wait(iWait);
+        KnipperRechts(5);
+        BoeBot.wait(iWait);
+
+        // Driving
+        toSpeed(50);
+        BoeBot.wait(iWait);
+        toSpeed(-50);
+        BoeBot.wait(iWait);
+
+        // Turning
+        turnDegrees(360, 50);
+        BoeBot.wait(iWait);
+        turnDegrees(360, -50);
+        BoeBot.wait(iWait);
+    }
+
+    /**
+     * Function to test the Boebot driving forward and backward
+     * @param iSpeed the speed to test with
+     */
+    public void toSpeed(int iSpeed) {
+        // Default speed
+        int iDefault = 1500;
+
+        // Checking if the speed is more or less than 0
+        if (iSpeed > 0) {
+            // Speeding up the boebot forwards
+            for (int i = 0; i < iSpeed; i++) {
+                // Setting the new speed
+                this.sLinks.update(iDefault - i);
+                this.sRechts.update(iDefault + i);
+                BoeBot.wait(20);
+            }
+            // Activating the emergency brakes
+            emergencyBrake();
+        } else if (iSpeed < 0) {
+            // Speeding up the boebot backwards
+            for (int i = 0; i > iSpeed; i--) {
+                // Setting the new speed
+                this.sLinks.update(iDefault - i);
+                this.sRechts.update(iDefault + i);
+                BoeBot.wait(20);
+            }
+            // Activating the emergency brakes
+            emergencyBrake();
+        }
     }
 
     public void detectObject(){

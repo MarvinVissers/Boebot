@@ -1,18 +1,19 @@
 package Controller;
 
 import Model.Obstacle;
-import javafx.collections.ObservableList;
 import json.Json;
 import json.JsonArray;
 import json.JsonObject;
-import json.JsonValue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.*;
 import java.util.ArrayList;
+
+/**
+ * @author Marvin Vissers
+ */
 
 public class ObstacleController extends ApiRequest {
     /**
@@ -109,6 +110,11 @@ public class ObstacleController extends ApiRequest {
         }
     }
 
+    /**
+     * Function to create the the obstacle array for Astar
+     * @param obstacles the obstacles that need to be in the array
+     * @return the array obstacle array for Astar
+     */
     public ArrayList<int[]> createObstacleList(ArrayList<Obstacle> obstacles) {
         // Creating an array to fill later
         ArrayList<int[]> obstacleList = new ArrayList<>();
@@ -124,6 +130,4 @@ public class ObstacleController extends ApiRequest {
 
         return obstacleList;
     }
-
-
 }
