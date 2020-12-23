@@ -167,19 +167,22 @@ public class LogController extends ApiRequest {
      * @return the action of the last log item
      */
     public String checkLogAction(String sLogText) {
-        // Setting the log text to uppercase to better check. test will be TEST
-        String sLogTextUpper = sLogText.toUpperCase();
+        try {
+            // Setting the log text to uppercase to better check. test will be TEST
+            String sLogTextUpper = sLogText.toUpperCase();
 
-        // Checking if log text contains the words test, or drive from
-        // Drive from for driving route
-        if (sLogTextUpper.contains("TEST")) {
-            // Seeing wich element(s) need to be tested
-            return checkTestAction(sLogTextUpper);
-        } else if (sLogTextUpper.contains("DRIVE FROM")) {
-            return "route";
-        } else {
-            // Nothing found
-            return null;
+            // Checking if log text contains the words test, or drive from
+            // Drive from for driving route
+            if (sLogTextUpper.contains("TEST")) {
+                // Seeing wich element(s) need to be tested
+                return checkTestAction(sLogTextUpper);
+            } else if (sLogTextUpper.contains("DRIVE FROM")) {
+                return "route";
+            } else {
+                return "none";
+            }
+        } catch (Exception e) {
+            return "none";
         }
     }
 

@@ -1,7 +1,4 @@
-import Controller.BoeBotController;
-import Controller.LogController;
-import Controller.ObstacleController;
-import Controller.RouteController;
+import Controller.*;
 import Model.Node;
 import Model.Obstacle;
 import Model.Log;
@@ -44,6 +41,12 @@ public class RobotMain {
         LogController logCtrl = new LogController("log");
         RouteController routeCtrl = new RouteController();
         BoeBotController boebotCtrl = new BoeBotController();
+        CalculateRouteController calcRouteCtrl = new CalculateRouteController();
+
+        ArrayList<Obstacle> obstacleList = new ArrayList(obstacleCtrl.get());
+        Node startPoint = new Node(0, 0);
+        Node endPoint = new Node(4, 4);
+        calcRouteCtrl.getFastestRoute(startPoint, endPoint, obstacleList);
 
         /**
          * Getting obstacles and creating list with obstacle coordinates for Rick
@@ -81,131 +84,131 @@ public class RobotMain {
         Route route = routeCtrl.DriveRoute(new Route(Route, new Node(0, 0), "Right", 1, 0));
 
         while (true) {
-            /**
-             * Checking the action that the boebot should be doing
-             * After that is a switch statement with the action
-             */
-            // Getting the last log item
-            String sLogText = logCtrl.getLastLog();
-            // Setting the log text to an action
-            sAction = logCtrl.checkLogAction(sLogText);
-
-            // Checking if the Boebot is busy
-            if (bBusy) {
-                // Switch to get do the action of the Boebot
-                switch (sAction) {
-                   // Test left left
-                    case "testLightLeft":
-                        // Posting to the log to start the test
-                        logCtrl.postLog("Attempting to test lights left");
-
-                        // Executing the test
-                        boebotCtrl.KnipperLinks(5);
-
-                        // Posting the the log that the test is done
-                        logCtrl.postLog("Test succeeded");
-
-                        // Setting the boebot open for new actions
-                        bBusy = false;
-                        break;
-                    // Test left right
-                    case "testLightRight":
-                        // Posting to the log to start the test
-                        logCtrl.postLog("Attempting to test lights right");
-
-                        // Executing the test
-                        boebotCtrl.KnipperRechts(5);
-
-                        // Posting the the log that the test is done
-                        logCtrl.postLog("Test succeeded");
-
-                        // Setting the boebot open for new actions
-                        bBusy = false;
-                        break;
-                    // Test drive foward
-                    case "testDriveForward":
-                        // Posting to the log to start the test
-                        logCtrl.postLog("Attempting to test drive forward");
-
-                        // Executing the test
-                        boebotCtrl.toSpeed(50);
-
-                        // Posting the the log that the test is done
-                        logCtrl.postLog("Test succeeded");
-
-                        // Setting the boebot open for new actions
-                        bBusy = false;
-                        break;
-                    // Test drive backward
-                    case "testDriveBackward":
-                        // Posting to the log to start the test
-                        logCtrl.postLog("Attempting to test drive backward");
-
-                        // Executing the test
-                        boebotCtrl.toSpeed(-50);
-
-                        // Posting the the log that the test is done
-                        logCtrl.postLog("Test succeeded");
-
-                        // Setting the boebot open for new actions
-                        bBusy = false;
-                        break;
-                    // Test turn left
-                    case "testTurnLeft":
-                        // Posting to the log to start the test
-                        logCtrl.postLog("Attempting to test turn left");
-
-                        // Executing the test
-                        boebotCtrl.turnDegrees(360, 50);
-
-                        // Posting the the log that the test is done
-                        logCtrl.postLog("Test succeeded");
-
-                        // Setting the boebot open for new actions
-                        bBusy = false;
-                        break;
-                    // Test turn right
-                    case "testTurnRight":
-                        // Posting to the log to start the test
-                        logCtrl.postLog("Attempting to test turn right");
-
-                        // Executing the test
-                        boebotCtrl.turnDegrees(360, -50);
-
-                        // Posting the the log that the test is done
-                        logCtrl.postLog("Test succeeded");
-
-                        // Setting the boebot open for new actions
-                        bBusy = false;
-                        break;
-                    // Test all test functions
-                    case "testAll":
-                        // Posting to the log to start the test
-                        logCtrl.postLog("Attempting to test all");
-
-                        // Executing the test
-                        boebotCtrl.testAll();
-
-                        // Posting the the log that the test is done
-                        logCtrl.postLog("Test succeeded");
-
-                        // Setting the boebot open for new actions
-                        bBusy = false;
-                        break;
-                }
-
-                if (sAction.contains("route")) {
-                    // Route code
-                }
-            } else {
-                // Checkking the action of the log
-                if (sAction != null) {
-                    System.out.println(sAction);
-                    bBusy = true;
-                } else {
-                    System.out.println(logCtrl.getLastLog());
-                }
-            }
+//            /**
+//             * Checking the action that the boebot should be doing
+//             * After that is a switch statement with the action
+//             */
+//            // Getting the last log item
+//            String sLogText = logCtrl.getLastLog();
+//            // Setting the log text to an action
+//            sAction = logCtrl.checkLogAction(sLogText);
+//
+//            // Checking if the Boebot is busy
+//            if (bBusy) {
+//                // Switch to get do the action of the Boebot
+//                switch (sAction) {
+//                   // Test left left
+//                    case "testLightLeft":
+//                        // Posting to the log to start the test
+//                        logCtrl.postLog("Attempting to test lights left");
+//
+//                        // Executing the test
+//                        boebotCtrl.KnipperLinks(5);
+//
+//                        // Posting the the log that the test is done
+//                        logCtrl.postLog("Test succeeded");
+//
+//                        // Setting the boebot open for new actions
+//                        bBusy = false;
+//                        break;
+//                    // Test left right
+//                    case "testLightRight":
+//                        // Posting to the log to start the test
+//                        logCtrl.postLog("Attempting to test lights right");
+//
+//                        // Executing the test
+//                        boebotCtrl.KnipperRechts(5);
+//
+//                        // Posting the the log that the test is done
+//                        logCtrl.postLog("Test succeeded");
+//
+//                        // Setting the boebot open for new actions
+//                        bBusy = false;
+//                        break;
+//                    // Test drive foward
+//                    case "testDriveForward":
+//                        // Posting to the log to start the test
+//                        logCtrl.postLog("Attempting to test drive forward");
+//
+//                        // Executing the test
+//                        boebotCtrl.toSpeed(50);
+//
+//                        // Posting the the log that the test is done
+//                        logCtrl.postLog("Test succeeded");
+//
+//                        // Setting the boebot open for new actions
+//                        bBusy = false;
+//                        break;
+//                    // Test drive backward
+//                    case "testDriveBackward":
+//                        // Posting to the log to start the test
+//                        logCtrl.postLog("Attempting to test drive backward");
+//
+//                        // Executing the test
+//                        boebotCtrl.toSpeed(-50);
+//
+//                        // Posting the the log that the test is done
+//                        logCtrl.postLog("Test succeeded");
+//
+//                        // Setting the boebot open for new actions
+//                        bBusy = false;
+//                        break;
+//                    // Test turn left
+//                    case "testTurnLeft":
+//                        // Posting to the log to start the test
+//                        logCtrl.postLog("Attempting to test turn left");
+//
+//                        // Executing the test
+//                        boebotCtrl.turnDegrees(360, 50);
+//
+//                        // Posting the the log that the test is done
+//                        logCtrl.postLog("Test succeeded");
+//
+//                        // Setting the boebot open for new actions
+//                        bBusy = false;
+//                        break;
+//                    // Test turn right
+//                    case "testTurnRight":
+//                        // Posting to the log to start the test
+//                        logCtrl.postLog("Attempting to test turn right");
+//
+//                        // Executing the test
+//                        boebotCtrl.turnDegrees(360, -50);
+//
+//                        // Posting the the log that the test is done
+//                        logCtrl.postLog("Test succeeded");
+//
+//                        // Setting the boebot open for new actions
+//                        bBusy = false;
+//                        break;
+//                    // Test all test functions
+//                    case "testAll":
+//                        // Posting to the log to start the test
+//                        logCtrl.postLog("Attempting to test all");
+//
+//                        // Executing the test
+//                        boebotCtrl.testAll();
+//
+//                        // Posting the the log that the test is done
+//                        logCtrl.postLog("Test succeeded");
+//
+//                        // Setting the boebot open for new actions
+//                        bBusy = false;
+//                        break;
+//                }
+//
+//                if (sAction.contains("route")) {
+//                    // Route code
+//                }
+//            } else {
+//                // Checkking the action of the log
+//                if (sAction != null) {
+////                    System.out.println(sAction);
+//                    bBusy = true;
+//                } else {
+////                    System.out.println(logCtrl.getLastLog());
+//                }
+//            }
 
             /**
              * Drive route logic

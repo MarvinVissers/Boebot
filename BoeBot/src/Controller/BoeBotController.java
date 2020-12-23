@@ -30,7 +30,7 @@ public class BoeBotController {
 //        BoeBot.wait(200);
 //        BoeBot.digitalWrite(15, false);
 //        BoeBot.wait(200);
-        controlLed(15, 200, iLoops);
+        controlLed(14, 200, iLoops);
     }
 
     public void KnipperRechts(int iLoops){
