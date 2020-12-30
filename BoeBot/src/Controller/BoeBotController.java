@@ -1,13 +1,12 @@
 package Controller;
 
 import Model.Node;
-import Model.Obstacle;
+import Model.SFNodes;
 import TI.BoeBot;
 import TI.Servo;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -61,13 +60,13 @@ public class BoeBotController {
 //         // TODO post naar api
 //    }
 
-    public ArrayList<Node> Astar( ArrayList<int[]> obstacleCoordinates) throws UnknownHostException {
+    public ArrayList<Node> Astar(ArrayList<int[]> obstacleCoordinates, Node gridSize, SFNodes sfNodes) throws UnknownHostException {
         ArrayList<Node> Cordinaten = new ArrayList<>();
        // System.out.println(Arrays.deepToString(obstacleCoordinates.toArray()));
-        Node initialNode = new Node(0, 0);
-        Node finalNode = new Node(10, 12);
-        int rows = 15;
-        int cols = 15;
+        Node initialNode = new Node(sfNodes.getStartNodes(),sfNodes.getStartColumn());
+        Node finalNode = new Node(sfNodes.getFinishNodes(), sfNodes.getFinishColumn());
+        int rows = gridSize.getRow();
+        int cols = gridSize.getCol();
         AStar aStar = new AStar(rows, cols, initialNode, finalNode);
         //blocksArray = new int[][]{{1, 3}, {2, 3}, {3, 3}};
         aStar.setBlocks(obstacleCoordinates);
