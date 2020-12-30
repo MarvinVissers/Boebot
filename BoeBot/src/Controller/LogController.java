@@ -210,6 +210,6 @@ public class LogController extends ApiRequest {
         }
 
         // Returning nothing if nothing is found
-        return null;
+        return "none";
     }
 }

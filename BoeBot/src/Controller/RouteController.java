@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 
 /**
  * @author Rick Deurloo
@@ -49,10 +48,10 @@ public class RouteController {
                             route.setDirection("Up");
                             break;
                         case "Up":
-                            route.setDirection("Left");
+                            route.setDirection("Right");
                             break;
                         case "Down":
-                            route.setDirection("Right");
+                            route.setDirection("Left");
                             break;
                         default:
                             System.out.println("error");
@@ -132,7 +131,7 @@ public class RouteController {
         return route;
     }
 
-    private boolean switchDirection(String sDirection, String sNewDirection) {
+    public boolean switchDirection(String sDirection, String sNewDirection) {
         if (sDirection.matches(sNewDirection)) {
             return true;
         } else {

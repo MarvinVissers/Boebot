@@ -26,8 +26,8 @@ public class RobotMain {
         int analogPin3 = 2;  // Left
 
         // Setting the servo wheels
-        Servo Slink = new Servo(12);
-        Servo Srechts = new Servo(13);
+        Servo sLinks = new Servo(12);
+        Servo sRechts = new Servo(13);
 
         // Setting the speeds for servo
         int iNormalSpeed = 1500;
@@ -46,7 +46,7 @@ public class RobotMain {
         ArrayList<Obstacle> obstacleList = new ArrayList(obstacleCtrl.get());
         Node startPoint = new Node(0, 0);
         Node endPoint = new Node(4, 4);
-        calcRouteCtrl.getFastestRoute(startPoint, endPoint, obstacleList);
+        ArrayList<Node> marfstarRoute =  calcRouteCtrl.getFastestRoute(startPoint, endPoint, obstacleList);
 
         /**
          * Getting obstacles and creating list with obstacle coordinates for Rick
@@ -80,11 +80,11 @@ public class RobotMain {
         Log log = new Log(null, null, "Opstarten Boebot");
         logCtrl.post(log);
 //        ArrayList<int[]> Route = BoeController.Astar(obstacleCoordinates);
-        ArrayList<Node> Route = boebotCtrl.Astar(obstacleCoordinates,routeCtrl.getGridSize(), routeCtrl.GetSFNodes());
+//        ArrayList<Node> Route = boebotCtrl.Astar(obstacleCoordinates,routeCtrl.getGridSize(), routeCtrl.GetSFNodes());
 //        BoeBot.wait(10000);
-        Slink.update(iNormalSpeed - iRaceSpeed);
-        Srechts.update(iNormalSpeed + iRaceSpeed);
-        Route route = routeCtrl.DriveRoute(new Route(Route, new Node(0, 0), "Right", 1, 0));
+        sLinks.update(iNormalSpeed - iRaceSpeed);
+        sRechts.update(iNormalSpeed + iRaceSpeed);
+        Route route = routeCtrl.DriveRoute(new Route(marfstarRoute, new Node(0, 0), "Right", 0, 0));
 
         while (true) {
            // BoeController.detectObject();
@@ -202,7 +202,65 @@ public class RobotMain {
                 }
 
                 if (sAction.contains("route")) {
-                    // Route code
+                    /**
+                     * Drive route logic
+                     */
+
+                    BoeBot.wait(1000);
+
+                    // Reading out the line followers
+                    int iSensorLeft = BoeBot.analogRead(analogPin1);
+                    int iSensorMiddle = BoeBot.analogRead(analogPin2);
+                    int iSensorRight = BoeBot.analogRead(analogPin3);
+
+                    // Checking if all 3 line followers see black wich means crossroad and the route is not yet completed
+                    if ((iSensorLeft >= iSensitivity) && (iSensorMiddle >= iSensitivity) && (iSensorRight >= iSensitivity) && route.getResult() == 0) {
+//                        System.out.println("Alvast voor een kruispunt");
+//                        // Playing some sound
+//                        BoeBot.freqOut(0,1500,1000);
+
+                        try {
+                            // Getting the coordinates for the log
+                            Node newCoordinates = route.getListCoordinates().get(route.getOffset());
+
+                            // Sending it to the log
+                            logCtrl.postLog("Found a crossroad. Turning " + route.getDirection() + " from (" + route.getLastCoordinates().getRow() + "," + route.getLastCoordinates().getCol() + ") to (" + newCoordinates.getRow() + "," + newCoordinates.getCol() + ")");
+                        } catch (Exception e) {
+                            System.out.println("Offset te groot");
+                        }
+
+                        switch (route.getDirection()) {
+                            case "Right":
+//                        boebotCtrl.turnDegrees(90, 50);
+                                System.out.println("Draai naar rechts");
+                                break;
+                            case "Left":
+//                        boebotCtrl.turnDegrees(90, -50);
+                                System.out.println("Draai naar links");
+                                break;
+                            case "Up":
+//                        boebotCtrl.turnDegrees(90, 50);
+                                System.out.println("Draai naar boven");
+                                break;
+                            case "Down":
+//                        boebotCtrl.turnDegrees(90, -50);
+                                System.out.println("Draai naar beneden");
+                                break;
+                        }
+
+                        // Waiting for a bit
+                        BoeBot.wait(250);
+
+                        // Checking if the route has been completed
+                        if (route.getResult() == 1) {
+                            logCtrl.postLog("Route completed");
+                        } else {
+                            // Bringing the boebot back to speed
+                            sLinks.update(iNormalSpeed - iRaceSpeed);
+                            sRechts.update(iNormalSpeed + iRaceSpeed);
+                            route = routeCtrl.DriveRoute(route);
+                        }
+                    }
                 }
             } else {
                 // Checkking the action of the log
@@ -212,70 +270,6 @@ public class RobotMain {
                 } else {
                     System.out.println(logCtrl.getLastLog());
                 }
-            }
-
-            /**
-             * Drive route logic
-             */
-            // Getting the fastest route
-            boebotCtrl.Astar(obstacleCoordinates, routeCtrl.getGridSize(), routeCtrl.GetSFNodes());
-            //System.out.println(BoeController.Astar(obstacleCoordinates, routeCtrl.getGridSize(),routeCtrl.GetSFNodes()));
-            BoeBot.wait(1000);
-
-            // Reading out the line followers
-            int iSensorLeft = BoeBot.analogRead(analogPin1);
-            int iSensorMiddle = BoeBot.analogRead(analogPin2);
-            int iSensorRight = BoeBot.analogRead(analogPin3);
-
-            // Checking if all 3 line followers see black wich means crossroad and the route is not yet completed
-            if ((iSensorLeft >= iSensitivity) && (iSensorMiddle >= iSensitivity) && (iSensorRight >= iSensitivity) && route.getResult() == 0) {
-//                System.out.println("Alvast voor een kruispunt");
-                // Playing some sound
-//                BoeBot.freqOut(0,1500,1000);
-
-//                try {
-//                    // Getting the coordinates for the log
-//                    Node newCoordinates = route.getListCoordinates().get(route.getOffset());
-//
-//                    // Sending it to the log
-//                    logCtrl.postLog("Found a crossroad. Turning " + route.getDirection() + " from (" + route.getLastCoordinates().getRow() + "," + route.getLastCoordinates().getCol() + ") to (" + newCoordinates.getRow() + "," + newCoordinates.getCol() + ")");
-//                } catch (Exception e) {
-//                    System.out.println("Offset te groot");
-//                }
-//
-//                switch (route.getDirection()) {
-//                    case "Right":
-//                        boebotCtrl.turnDegrees(90, 50);
-//                        System.out.println("Draai naar rechts");
-//                        break;
-//                    case "Left":
-//                        boebotCtrl.turnDegrees(90, -50);
-//                        System.out.println("Draai naar links");
-//                        break;
-//                    case "Up":
-//                        boebotCtrl.turnDegrees(90, 50);
-//                        System.out.println("Draai naar boven");
-//                        break;
-//                    case "Down":
-//                        boebotCtrl.turnDegrees(90, -50);
-//                        System.out.println("Draai naar beneden");
-//                        break;
-//                }
-//
-//                // Waiting for a bit
-//                BoeBot.wait(250);
-//
-//                // Checking if the route has been completed
-//                if (route.getResult() == 1) {
-//                    logCtrl.postLog("Route completed");
-//                } else {
-//                    // Bringing the boebot back to speed
-//                    sLeft.update(iNormalSpeed - iRaceSpeed);
-//                    sRight.update(iNormalSpeed + iRaceSpeed);
-//                    route = routeCtrl.DriveRoute(route);
-//                }
-            } else {
-                // IDK, do something
             }
         }
     }
