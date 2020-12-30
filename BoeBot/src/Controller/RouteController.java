@@ -38,21 +38,83 @@ public class RouteController {
             Node routeOffset = route.getListCoordinates().get(route.getOffset());
 
             // Last 0,0 New = 1,0
-            // Checking wether the row or column changes for the boebots direction
+            // Checking whether the row or column changes for the boebots direction
             if (route.getLastCoordinates().getRow() < routeOffset.getRow()) {
-                // Setting the new direction
-                route.setDirection("Right");
+                // Going a row up
+                // Checking if direction is chancing
+                if (!switchDirection(route.getDirection(), "Right")) {
+                    // Setting the new direction based on its current direction
+                    switch (route.getDirection()) {
+                        case "Left":
+                            route.setDirection("Up");
+                            break;
+                        case "Up":
+                            route.setDirection("Left");
+                            break;
+                        case "Down":
+                            route.setDirection("Right");
+                            break;
+                        default:
+                            System.out.println("error");
+                    }
+                }
             } else if (route.getLastCoordinates().getRow() > routeOffset.getRow()) {
-                // Setting the new direction
-                route.setDirection("Left");
+                // Going a row down
+                // Checking if direction is chancing
+                if (!switchDirection(route.getDirection(), "Left")) {
+                    // Setting the new direction based on its current direction
+                    switch (route.getDirection()) {
+                        case "Up":
+                            route.setDirection("Left");
+                            break;
+                        case "Down":
+                            route.setDirection("Right");
+                            break;
+                        case "Right":
+                            route.setDirection("Down");
+                            break;
+                        default:
+                            System.out.println("error");
+                    }
+                }
             } else if (route.getLastCoordinates().getCol() < routeOffset.getCol()) {
-                // Setting the new direction
-                route.setDirection("Up");
+                // Going a column up
+                // Checking if direction is chancing
+                if (!switchDirection(route.getDirection(), "Up")) {
+                    // Setting the new direction based on its current direction
+                    switch (route.getDirection()) {
+                        case "Down":
+                            route.setDirection("Up");
+                            break;
+                        case "Right":
+                            route.setDirection("Left");
+                            break;
+                        case "Left":
+                            route.setDirection("Right");
+                            break;
+                        default:
+                            System.out.println("error");
+                    }
+                }
             } else if (route.getLastCoordinates().getCol() > routeOffset.getCol()) {
-                // Setting the new direction
-                route.setDirection("Down");
-            } if (route.getLastCoordinates().getRow() < routeOffset.getRow() && route.getLastCoordinates().getCol() == routeOffset.getCol()) {
-                // Do something
+                // Going a column down
+                // Checking if direction is chancing
+                if (!switchDirection(route.getDirection(), "Down")) {
+                    // Setting the new direction based on its current direction
+                    switch (route.getDirection()) {
+                        case "Right":
+                            route.setDirection("Left");
+                            break;
+                        case "Left":
+                            route.setDirection("Right");
+                            break;
+                        case "Up":
+                            route.setDirection("Down");
+                            break;
+                        default:
+                            System.out.println("error");
+                    }
+                }
             }
 
             // Updating the offset
@@ -68,6 +130,14 @@ public class RouteController {
 
         // Giving back the route
         return route;
+    }
+
+    private boolean switchDirection(String sDirection, String sNewDirection) {
+        if (sDirection.matches(sNewDirection)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

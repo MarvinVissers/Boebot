@@ -80,7 +80,7 @@ public class RobotMain {
         Log log = new Log(null, null, "Opstarten Boebot");
         logCtrl.post(log);
 //        ArrayList<int[]> Route = BoeController.Astar(obstacleCoordinates);
-        ArrayList<Node> Route = BoeController.Astar(obstacleCoordinates,routeCtrl.getGridSize(), routeCtrl.GetSFNodes());
+        ArrayList<Node> Route = boebotCtrl.Astar(obstacleCoordinates,routeCtrl.getGridSize(), routeCtrl.GetSFNodes());
 //        BoeBot.wait(10000);
         Slink.update(iNormalSpeed - iRaceSpeed);
         Srechts.update(iNormalSpeed + iRaceSpeed);
@@ -107,7 +107,7 @@ public class RobotMain {
                         logCtrl.postLog("Attempting to test lights left");
 
                         // Executing the test
-                        BoeController.KnipperLinks(5);
+                        boebotCtrl.KnipperLinks(5);
 
                         // Posting the the log that the test is done
                         logCtrl.postLog("Test succeeded");
@@ -121,7 +121,7 @@ public class RobotMain {
                         logCtrl.postLog("Attempting to test lights right");
 
                         // Executing the test
-                        BoeController.KnipperRechts(5);
+                        boebotCtrl.KnipperRechts(5);
 
                         // Posting the the log that the test is done
                         logCtrl.postLog("Test succeeded");
@@ -135,7 +135,7 @@ public class RobotMain {
                         logCtrl.postLog("Attempting to test drive forward");
 
                         // Executing the test
-                        BoeController.toSpeed(50);
+                        boebotCtrl.toSpeed(50);
 
                         // Posting the the log that the test is done
                         logCtrl.postLog("Test succeeded");
@@ -149,7 +149,7 @@ public class RobotMain {
                         logCtrl.postLog("Attempting to test drive backward");
 
                         // Executing the test
-                        BoeController.toSpeed(-50);
+                        boebotCtrl.toSpeed(-50);
 
                         // Posting the the log that the test is done
                         logCtrl.postLog("Test succeeded");
@@ -163,7 +163,7 @@ public class RobotMain {
                         logCtrl.postLog("Attempting to test turn left");
 
                         // Executing the test
-                        BoeController.turnDegrees(360, 50);
+                        boebotCtrl.turnDegrees(360, 50);
 
                         // Posting the the log that the test is done
                         logCtrl.postLog("Test succeeded");
@@ -177,7 +177,7 @@ public class RobotMain {
                         logCtrl.postLog("Attempting to test turn right");
 
                         // Executing the test
-                        BoeController.turnDegrees(360, -50);
+                        boebotCtrl.turnDegrees(360, -50);
 
                         // Posting the the log that the test is done
                         logCtrl.postLog("Test succeeded");
@@ -191,7 +191,7 @@ public class RobotMain {
                         logCtrl.postLog("Attempting to test all");
 
                         // Executing the test
-                        BoeController.testAll();
+                        boebotCtrl.testAll();
 
                         // Posting the the log that the test is done
                         logCtrl.postLog("Test succeeded");
@@ -218,7 +218,7 @@ public class RobotMain {
              * Drive route logic
              */
             // Getting the fastest route
-            BoeController.Astar(obstacleCoordinates, routeCtrl.getGridSize(), routeCtrl.GetSFNodes());
+            boebotCtrl.Astar(obstacleCoordinates, routeCtrl.getGridSize(), routeCtrl.GetSFNodes());
             //System.out.println(BoeController.Astar(obstacleCoordinates, routeCtrl.getGridSize(),routeCtrl.GetSFNodes()));
             BoeBot.wait(1000);
 
