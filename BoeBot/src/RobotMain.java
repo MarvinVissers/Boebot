@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class RobotMain {
 
     public static void main(String[] args) throws UnknownHostException {
-        /**
+        /*
          * Setting the variabeles that will be used
          */
         // Status if the Boebot is busy
@@ -47,28 +47,6 @@ public class RobotMain {
         Node startPoint = new Node(0, 0);
         Node endPoint = new Node(4, 4);
         ArrayList<Node> marfstarRoute =  calcRouteCtrl.getFastestRoute(startPoint, endPoint, obstacleList);
-
-        /**
-         * Getting obstacles and creating list with obstacle coordinates for Rick
-         */
-//        System.out.println("Obstacle functions");
-//        // Filling the obstacle list
-//        System.out.println("Obstacle get");
-//        ArrayList<Obstacle> obstacles = new ArrayList(obstacleCtrl.get());
-//        System.out.println(obstacles);
-//        // Filling an array with the obstacle coordinates
-//        System.out.println("Obstacle coordinates");
-//        ArrayList<int[]> obstacleCoordinates = new ArrayList(obstacleCtrl.createObstacleList(obstacles));
-//        System.out.println(obstacleCoordinates.size());
-//        System.out.println(obstacleCoordinates);
-
-        /**
-         * Actions with Log
-         */
-//        System.out.println("Post log");
-//        Log log = new Log(null, null, "Boebot online");
-//        logCtrl.post(log);
-//        System.out.println("De laatste log was: " + logCtrl.getLastLog());
 
         /**
          * Actions with obstacles

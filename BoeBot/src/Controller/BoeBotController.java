@@ -60,23 +60,6 @@ public class BoeBotController {
 //         // TODO post naar api
 //    }
 
-    public ArrayList<Node> Astar(ArrayList<int[]> obstacleCoordinates, Node gridSize, SFNodes sfNodes) throws UnknownHostException {
-        ArrayList<Node> Cordinaten = new ArrayList<>();
-       // System.out.println(Arrays.deepToString(obstacleCoordinates.toArray()));
-        Node initialNode = new Node(sfNodes.getStartNodes(),sfNodes.getStartColumn());
-        Node finalNode = new Node(sfNodes.getFinishNodes(), sfNodes.getFinishColumn());
-        int rows = gridSize.getRow();
-        int cols = gridSize.getCol();
-        AStar aStar = new AStar(rows, cols, initialNode, finalNode);
-        //blocksArray = new int[][]{{1, 3}, {2, 3}, {3, 3}};
-        aStar.setBlocks(obstacleCoordinates);
-        List<Node> path = aStar.findPath();
-        for (Node node : path) {
-            Cordinaten.add(new Node(node.getRow(), node.getCol()));
-        }
-        return Cordinaten;
-    }
-
     /**
      * Function to go past every test function
      */
