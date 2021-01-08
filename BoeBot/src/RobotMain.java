@@ -71,14 +71,14 @@ public class RobotMain {
 //        BoeBot.wait(10000);
 //        sLinks.update(iNormalSpeed - iRaceSpeed);
 //        sRechts.update(iNormalSpeed + iRaceSpeed);
-        ArrayList<Node> marfstarRoute = new ArrayList<>();
-        marfstarRoute.add(new Node(0,0));
-        marfstarRoute.add(new Node(1,0));
-        marfstarRoute.add(new Node(1,1));
+//        ArrayList<Node> marfstarRoute = new ArrayList<>();
+//        marfstarRoute.add(new Node(0,0));
+//        marfstarRoute.add(new Node(1,0));
+//        marfstarRoute.add(new Node(1,1));
 //        marfstarRoute.add(new Node(2,1));
 //        marfstarRoute.add(new Node(2,2));
 //        marfstarRoute.add(new Node(4,1));
-        Route route = routeCtrl.DriveRoute(new Route(marfstarRoute, new Node(0, 0), "Right", 0, 0));
+        //Route route = routeCtrl.DriveRoute(new Route(marfstarRoute, new Node(0, 0), "Right", 0, 0));
 
         while (true) {
            // BoeController.detectObject();
@@ -86,10 +86,6 @@ public class RobotMain {
              * Checking the action that the boebot should be doing
              * After that is a switch statement with the action
              */
-            // Getting the last log item
-            String sLogText = logCtrl.getLastLog();
-            // Setting the log text to an action
-            sAction = logCtrl.checkLogAction(sLogText);
 
             // Checking if the Boebot is busy
             if (bBusy) {
