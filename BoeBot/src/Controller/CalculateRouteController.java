@@ -30,6 +30,7 @@ public class CalculateRouteController {
         ArrayList<Node> fastestRoute = loopThroughGrid(startNode, startNode, endNode, obstacleList, new ArrayList<Node>(), iGridSize, 0);
 
         System.out.println(fastestRoute);
+        System.out.println(obstacleList);
 
         // Giving back the fastest route
         return fastestRoute;
@@ -50,6 +51,7 @@ public class CalculateRouteController {
             // Checking if next point is with obstacle
             ArrayList<Node> currentNodeOptions = checkAroundCurrentPoint(startNode, endNode);
             ArrayList<Node> currentNodeOptionsFiltered = filterObstacleOptions(startNode, currentNodeOptions, obstacleList, new ArrayList<Node>(), 0);
+//            System.out.println("Filtered options = " + currentNodeOptionsFiltered.size());
 
             // Creating a variable for the last point
             Node lastPoint = startNode;
@@ -63,6 +65,7 @@ public class CalculateRouteController {
 
             // Getting the best option
             Node bestOption = getNextOption(lastPoint, currentPoint, endNode, currentNodeOptionsFiltered);
+            System.out.println(bestOption);
 
             // Adding the point to the list
             fastestRoute.add(bestOption);
@@ -97,6 +100,8 @@ public class CalculateRouteController {
         // Int for the next row
         int iNextRow = currentPoint.getRow() + 1;
         int iNextCol = currentPoint.getCol() + 1;
+        int iLastRow = currentPoint.getRow() - 1;
+        int iLastCol = currentPoint.getCol() - 1;
 
         // Checking if the boebot is on the start row
         if (currentPoint.getRow() == 0) {
@@ -123,6 +128,9 @@ public class CalculateRouteController {
             // Adding options for the column and row
             currentPointOptions.add(new Node(iNextRow, currentPoint.getCol()));
             currentPointOptions.add(new Node(currentPoint.getRow(), iNextRow));
+
+            currentPointOptions.add(new Node(iLastRow, currentPoint.getCol()));
+            currentPointOptions.add(new Node(currentPoint.getRow(), iLastCol));
         }
 
         // Giving back the options
@@ -199,38 +207,46 @@ public class CalculateRouteController {
      * @return the Node with the best option
      */
     private Node getNextOption(Node lastPoint, Node currentPoint, Node endPoint, ArrayList<Node> currentNodeOptionsFiltered) {
-        // Checking if their are multiple options in the array
-        if (currentNodeOptionsFiltered.size() > 1) {
-            // Creating variables for the next row and column
-            int iNextRow = currentPoint.getRow() + 1;
-            int iNextCol = currentPoint.getCol() + 1;
+        // Creating variables for the next row and column
+        int iNextRow = currentPoint.getRow() + 1;
+        int iNextCol = currentPoint.getCol() + 1;
 
-            // Checking if the Boebot is on 0,0
-            if (currentPoint.getRow() == lastPoint.getRow() && currentPoint.getCol() == lastPoint.getCol()) {
-                // Boebot has 2 options right now. 0,1 and 1,0. Our preference is than to go right first
-                return new Node(currentPoint.getRow(), iNextCol);
-            }
-            // Checking if the boebot last changed column or changed row
-            if (currentPoint.getRow() == lastPoint.getRow() && currentPoint.getRow() != endPoint.getRow()) {
+//        System.out.println("Last point was " + lastPoint);
+
+        // Checking if BoeBot is at starting point
+        if (lastPoint.getRow() == 0 && lastPoint.getCol() == 0) {
+            return new Node(iNextRow, currentPoint.getCol());
+        } else {
+            /**
+             * Lastpoint (1, 2)
+             * Currentpoint (2, 2)
+             *
+             * nextNode (2, iNextColumn(3))
+             * nextNode (iNextRow(3), 2)
+             */
+
+            if (currentPoint.getRow() == lastPoint.getRow() && currentPoint.getRow() != endPoint.getRow() && currentPoint.getCol() != lastPoint.getCol()) {
                 // Going up to create the stairs, fastest route
-                System.out.println("We gaan omhoog");
+                System.out.println("We gaan omhoog voor de lol");
                 return new Node(iNextRow, currentPoint.getCol());
-            } else if (currentPoint.getCol() == lastPoint.getCol() && currentPoint.getCol() != endPoint.getCol()) {
+            } else if (currentPoint.getCol() == lastPoint.getCol() && currentPoint.getCol() != endPoint.getCol() && currentPoint.getRow() != lastPoint.getRow()) {
                 // Staying on the same line to make the stairs, fastest route
-                System.out.println("We gaan opzij");
+                System.out.println("We gaan opzij voor de lol");
                 return new Node(currentPoint.getRow(), iNextCol);
             } else if (currentPoint.getRow() == endPoint.getRow()) {
                 // Staying on the same row but changing columns
                 System.out.println("We gaan opzij maar alleen omdat het niet anders kan");
                 return new Node(currentPoint.getRow(), iNextCol);
-            } else {
+            } else if (currentPoint.getCol() == endPoint.getCol()) {
                 // Staying on the same column but changing rows
                 System.out.println("We gaan omhoog maar alleen omdat het niet anders kan");
                 return new Node(iNextRow, currentPoint.getCol());
+//            } else if () {
+
+            } else {
+                System.out.println("Maar 1 optie");
+                return currentNodeOptionsFiltered.get(0);
             }
-        } else {
-            // Returning the one possibility
-            return currentNodeOptionsFiltered.get(0);
         }
     }
 }

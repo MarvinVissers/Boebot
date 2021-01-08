@@ -158,7 +158,7 @@ public class LogController extends ApiRequest {
             System.out.println(e);
         }
         // Returning nothing
-        return null;
+        return "none";
     }
 
     /**
