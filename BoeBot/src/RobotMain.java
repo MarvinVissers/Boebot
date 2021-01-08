@@ -39,6 +39,9 @@ public class RobotMain {
         // Setting the sensor sensitivity
         int iSensitivity = 200;
 
+        BoeBot.digitalWrite(2, false);
+        BoeBot.digitalWrite(14, false);
+
         // Creating instances of the needed classes
         ObstacleController obstacleCtrl = new ObstacleController("obstacle");
         LogController logCtrl = new LogController("log");
@@ -48,8 +51,8 @@ public class RobotMain {
 
         ArrayList<Obstacle> obstacleList = new ArrayList(obstacleCtrl.get());
         Node startPoint = new Node(0, 0);
-        Node endPoint = new Node(7, 4);
-        //ArrayList<Node> marfstarRoute =  calcRouteCtrl.getFastestRoute(startPoint, endPoint, obstacleList);
+        Node endPoint = new Node(4, 4);
+        ArrayList<Node> marfstarRoute =  calcRouteCtrl.getFastestRoute(startPoint, endPoint, obstacleList);
 
         /**
          * Actions with obstacles
@@ -60,6 +63,9 @@ public class RobotMain {
         ArrayList<int[]> obstacleCoordinates = new ArrayList(obstacleCtrl.createObstacleList(obstacles));
         Log log = new Log(null, null, "Opstarten Boebot");
         logCtrl.post(log);
+
+        ArrayList<Node> AstarRoute = boebotCtrl.Astar(obstacleCoordinates,routeCtrl.getGridSize(), routeCtrl.GetSFNodes());
+        Route route = routeCtrl.DriveRoute(new Route(AstarRoute, new Node(0, 0), "Right", 1, 0));
 //        ArrayList<int[]> Route = BoeController.Astar(obstacleCoordinates);
 //        ArrayList<Node> Route = boebotCtrl.Astar(obstacleCoordinates,routeCtrl.getGridSize(), routeCtrl.GetSFNodes());
 //        BoeBot.wait(10000);
@@ -80,6 +86,10 @@ public class RobotMain {
              * Checking the action that the boebot should be doing
              * After that is a switch statement with the action
              */
+            // Getting the last log item
+            String sLogText = logCtrl.getLastLog();
+            // Setting the log text to an action
+            sAction = logCtrl.checkLogAction(sLogText);
 
             // Checking if the Boebot is busy
             if (bBusy) {
@@ -190,7 +200,7 @@ public class RobotMain {
                      * Drive route logic
                      */
 
-                    //BoeBot.wait(500);
+                    BoeBot.wait(1000);
 
                     // Reading out the line followers
                     int iSensorLeft = BoeBot.analogRead(analogPin1);
@@ -307,7 +317,7 @@ public class RobotMain {
                         sDirection = route.getDirection();
 
                         // Waiting for a bit
-                        BoeBot.wait(1000);
+                        BoeBot.wait(250);
 
                         // Checking if the route has been completed
                         if (route.getResult() == 1) {
@@ -332,6 +342,8 @@ public class RobotMain {
                 if (!sAction.toUpperCase().matches("NONE")) {
                     System.out.println(sAction);
                     bBusy = true;
+                } else {
+                    System.out.println(logCtrl.getLastLog());
                 }
             }
         }
