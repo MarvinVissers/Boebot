@@ -1,5 +1,6 @@
 package Controller;
 
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import json.JsonValue;
 
 import java.io.UnsupportedEncodingException;
@@ -30,6 +31,8 @@ abstract class ApiRequest {
         this.sMap = sMap;
         // Setting the base URL with the validation parameter filled in
         this.baseURL = "https://bp6.adainforma.tk/helloworldbot/functions/datalayer/api/" + sMap + "/?selector=" + this.sSelector + "&validator=" + this.sToken;
+
+        System.out.println(sIpAdres);
     }
 
     /**
