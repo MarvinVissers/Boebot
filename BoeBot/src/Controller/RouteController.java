@@ -44,29 +44,77 @@ public class RouteController {
                 // Going a row up
                 // Checking if direction is chancing
                 if (!switchDirection(route.getDirection(), "Right")) {
-                    // Setting the new direction
-                    route.setDirection("Right");
+                    // Setting the new direction based on its current direction
+                    switch (route.getDirection()) {
+                        case "Left":
+                            route.setDirection("Up");
+                            break;
+                        case "Up":
+                            route.setDirection("Right");
+                            break;
+                        case "Down":
+                            route.setDirection("Left");
+                            break;
+                        default:
+                            System.out.println("error");
+                    }
                 }
             } else if (route.getLastCoordinates().getRow() > routeOffset.getRow()) {
                 // Going a row down
                 // Checking if direction is chancing
                 if (!switchDirection(route.getDirection(), "Left")) {
-                    // Setting the new direction
-                    route.setDirection("Left");
+                    // Setting the new direction based on its current direction
+                    switch (route.getDirection()) {
+                        case "Up":
+                            route.setDirection("Left");
+                            break;
+                        case "Down":
+                            route.setDirection("Right");
+                            break;
+                        case "Right":
+                            route.setDirection("Down");
+                            break;
+                        default:
+                            System.out.println("error");
+                    }
                 }
             } else if (route.getLastCoordinates().getCol() < routeOffset.getCol()) {
                 // Going a column up
                 // Checking if direction is chancing
                 if (!switchDirection(route.getDirection(), "Up")) {
-                    // Setting the new direction
-                    route.setDirection("Up");
+                    // Setting the new direction based on its current direction
+                    switch (route.getDirection()) {
+                        case "Down":
+                            route.setDirection("Up");
+                            break;
+                        case "Right":
+                            route.setDirection("Left");
+                            break;
+                        case "Left":
+                            route.setDirection("Right");
+                            break;
+                        default:
+                            System.out.println("error");
+                    }
                 }
             } else if (route.getLastCoordinates().getCol() > routeOffset.getCol()) {
                 // Going a column down
                 // Checking if direction is chancing
                 if (!switchDirection(route.getDirection(), "Down")) {
-                    // Setting the new direction
-                    route.setDirection("Down");
+                    // Setting the new direction based on its current direction
+                    switch (route.getDirection()) {
+                        case "Right":
+                            route.setDirection("Left");
+                            break;
+                        case "Left":
+                            route.setDirection("Right");
+                            break;
+                        case "Up":
+                            route.setDirection("Down");
+                            break;
+                        default:
+                            System.out.println("error");
+                    }
                 }
             }
 
