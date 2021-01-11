@@ -92,14 +92,6 @@ public class LogController extends ApiRequest {
             URLConnection yc = oracle.openConnection();
             // Reading the file
             BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-
-            // String for the given JSON
-            String inputLine;
-            // Looping through the JSON
-            while ((inputLine = in.readLine()) != null) {
-                // Outputting the result
-                System.out.println(inputLine);
-            }
         } catch (Exception e) {
             System.out.println(e);
         }

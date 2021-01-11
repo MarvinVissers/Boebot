@@ -25,8 +25,6 @@ public class RouteController {
 
     }
 
-
-
     /**
      * Function to set the new coordinates for the boebot to drive to
      * @param route the Route object

@@ -47,12 +47,6 @@ public class RobotMain {
         LogController logCtrl = new LogController("log");
         RouteController routeCtrl = new RouteController();
         BoeBotController boebotCtrl = new BoeBotController();
-        CalculateRouteController calcRouteCtrl = new CalculateRouteController();
-
-        ArrayList<Obstacle> obstacleList = new ArrayList(obstacleCtrl.get());
-        Node startPoint = new Node(0, 0);
-        Node endPoint = new Node(4, 4);
-//        ArrayList<Node> marfstarRoute =  calcRouteCtrl.getFastestRoute(startPoint, endPoint, obstacleList);
 
         /**
          * Actions with obstacles
@@ -65,20 +59,7 @@ public class RobotMain {
         logCtrl.post(log);
 
         ArrayList<Node> AstarRoute = boebotCtrl.Astar(obstacleCoordinates,routeCtrl.getGridSize(), routeCtrl.GetSFNodes());
-//        Route route = routeCtrl.DriveRoute(new Route(AstarRoute, new Node(0, 0), "Right", 1, 0));
-//        ArrayList<int[]> Route = BoeController.Astar(obstacleCoordinates);
-//        ArrayList<Node> Route = boebotCtrl.Astar(obstacleCoordinates,routeCtrl.getGridSize(), routeCtrl.GetSFNodes());
-//        BoeBot.wait(10000);
-//        sLinks.update(iNormalSpeed - iRaceSpeed);
-//        sRechts.update(iNormalSpeed + iRaceSpeed);
-        ArrayList<Node> marfstarRoute = new ArrayList<>();
-        marfstarRoute.add(new Node(0,0));
-        marfstarRoute.add(new Node(1,0));
-        marfstarRoute.add(new Node(1,1));
-        marfstarRoute.add(new Node(0,1));
-//        marfstarRoute.add(new Node(2,2));
-//        marfstarRoute.add(new Node(4,1));
-        Route route = routeCtrl.DriveRoute(new Route(marfstarRoute, new Node(0, 0), "Right", 0, 0));
+        Route route = routeCtrl.DriveRoute(new Route(AstarRoute, new Node(0, 0), "Right", 0, 0));
 
         sLinks.update(iRaceSpeed);
         sRechts.update(iRaceSpeed);
@@ -208,7 +189,6 @@ public class RobotMain {
 
                     // Checking if all 3 line followers see black wich means crossroad and the route is not yet completed
                     if ((iSensorLeft >= iSensitivity) && (iSensorMiddle >= iSensitivity) && (iSensorRight >= iSensitivity) && route.getResult() == 0) {
-//                        System.out.println("Alvast voor een kruispunt");
                         // Playing some sound
                         BoeBot.freqOut(0,1500,1000);
 
@@ -238,7 +218,6 @@ public class RobotMain {
                                         case "Up":
                                             boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperLinks(10);
-//                                            BoeBot.wait(500);
                                             boebotCtrl.turnDegrees(90, -25);
                                             System.out.println("Draai van Rechts naar  Richting omhoog");
 
@@ -246,7 +225,6 @@ public class RobotMain {
                                         case "Down":
                                             boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperRechts(10);
-//                                            BoeBot.wait(500);
                                             boebotCtrl.turnDegrees(90, 25);
                                             System.out.println("Draai van Rechts naar  Richting Omlaag");
                                             break;
@@ -259,14 +237,12 @@ public class RobotMain {
                                         case "Up":
                                             boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperRechts(10);
-//                                            BoeBot.wait(500);
                                             boebotCtrl.turnDegrees(90, 25);
                                             System.out.println("Draai van LInks naar  Richting omhoog");
                                             break;
                                         case "Down":
                                             boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperLinks(10);
-//                                            BoeBot.wait(500);
                                             boebotCtrl.turnDegrees(90, -25);
                                             System.out.println("Draai van LInks naar  Richting Omlaag");
                                             break;
@@ -280,14 +256,12 @@ public class RobotMain {
                                         case "Right":
                                             boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperLinks(10);
-//                                            BoeBot.wait(500);
                                             System.out.println("Draai van omhoog naar  Richting rechts");
                                             boebotCtrl.turnDegrees(90, -25);
                                             break;
                                         case "Left":
                                             boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperRechts(10);
-//                                            BoeBot.wait(500);
                                             System.out.println("Draai van omhoog naar richting Links");
                                             boebotCtrl.turnDegrees(90, 25);
                                             break;
@@ -300,14 +274,12 @@ public class RobotMain {
                                         case "Right":
                                             boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperLinks(10);
-//                                            BoeBot.wait(500);
                                             boebotCtrl.turnDegrees(90, -25);
                                             System.out.println("Draai van Omlaag naar  Richting Rechts");
                                             break;
                                         case "Left":
                                             boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperRechts(10);
-//                                            BoeBot.wait(500);
                                             boebotCtrl.turnDegrees(90, 25);
                                             System.out.println("Draai van Omlaag naar  Richting Links");
                                             break;
@@ -318,9 +290,6 @@ public class RobotMain {
 
                         // Updating the direction
                         sDirection = route.getDirection();
-
-//                        // Waiting for a bit
-//                        BoeBot.wait(250);
 
                         // Checking if the route has been completed
                         if (route.getResult() == 1) {
@@ -334,16 +303,12 @@ public class RobotMain {
                             route = routeCtrl.DriveRoute(route);
                         }
                     } else if (((iSensorLeft >= iSensitivity) && (iSensorMiddle <= iSensitivity) && (iSensorRight <= iSensitivity)) || ((iSensorLeft >= iSensitivity) && (iSensorMiddle >= iSensitivity) && (iSensorRight <= iSensitivity)) && route.getResult() == 0) {
-//                        System.out.println("Naar rechts draaien langzaam");
                         sLinks.update(iNormalSpeed);
                         sRechts.update(iNormalSpeed + iRaceSpeed);
                     } else if (((iSensorLeft <= iSensitivity) && (iSensorMiddle <= iSensitivity) && (iSensorRight >= iSensitivity)) || ((iSensorLeft <= iSensitivity) && (iSensorMiddle >= iSensitivity) && (iSensorRight >= iSensitivity)) && route.getResult() == 0) {
-//                        System.out.println("Naar links draaien");
                         sLinks.update(iNormalSpeed - iRaceSpeed);
                         sRechts.update(iNormalSpeed);
                     } else if ((iSensorLeft <= iSensitivity) && (iSensorMiddle >= iSensitivity) && (iSensorRight <= iSensitivity) && route.getResult() == 0) {
-//                        System.out.println("Naar voren");
-                        //BoeBot.wait(500);
                         sLinks.update(iNormalSpeed - iRaceSpeed);
                         sRechts.update(iNormalSpeed + iRaceSpeed);
                     }

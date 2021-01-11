@@ -31,8 +31,6 @@ abstract class ApiRequest {
         this.sMap = sMap;
         // Setting the base URL with the validation parameter filled in
         this.baseURL = "https://bp6.adainforma.tk/helloworldbot/functions/datalayer/api/" + sMap + "/?selector=" + this.sSelector + "&validator=" + this.sToken;
-
-        System.out.println(sIpAdres);
     }
 
     /**

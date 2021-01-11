@@ -42,18 +42,10 @@ public class BoeBotController {
     }
     
     public void KnipperLinks(int iLoops){
-//        BoeBot.digitalWrite(15, true);
-//        BoeBot.wait(200);
-//        BoeBot.digitalWrite(15, false);
-//        BoeBot.wait(200);
         controlLed(14, 200, iLoops);
     }
 
     public void KnipperRechts(int iLoops){
-//        BoeBot.digitalWrite(2, true);
-//        BoeBot.wait(200);
-//        BoeBot.digitalWrite(2, false);
-//        BoeBot.wait(200);
         controlLed(2, 200, iLoops);
     }
 
@@ -71,11 +63,6 @@ public class BoeBotController {
            BoeBot.wait(iWait);
        }
     }
-
-//    public void ObstacleDetect(){
-//        BoeBot.freqOut(0,1000,1000);
-//         // TODO post naar api
-//    }
 
     /**
      * Function to go past every test function
