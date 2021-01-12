@@ -7,6 +7,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 
 import Model.Log;
 
@@ -16,8 +17,7 @@ import json.*;
  * @author Marvin Vissers
  */
 
-public class LogController extends ApiRequest implements Runnable {
-    private volatile String sLogAction = "none";
+public class LogController extends ApiRequest {
 
     /**
      * Constructor for the Controller.ApiRequest
@@ -26,40 +26,6 @@ public class LogController extends ApiRequest implements Runnable {
      */
     public LogController(String sMap) throws UnknownHostException {
         super(sMap);
-    }
-
-    /**
-     * When an object implementing interface <code>Runnable</code> is used
-     * to create a thread, starting the thread causes the object's
-     * <code>run</code> method to be called in that separately executing
-     * thread.
-     * <p>
-     * The general contract of the method <code>run</code> is that it may
-     * take any action whatsoever.
-     *
-     * @see Thread#run()
-     */
-    @Override
-    public void run() {
-        try {
-            // Getting the last log
-            String sLogText = getLastLog();
-
-            // Getting its action
-            this.sLogAction = checkLogAction(sLogText);
-
-            // Sleeeping for a bit
-            Thread.sleep(5000);
-            run();
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            this.sLogAction = "none";
-        }
-    }
-
-    public String getLogText() {
-        return this.sLogAction;
     }
 
     /**
@@ -149,7 +115,6 @@ public class LogController extends ApiRequest implements Runnable {
         // Creating an log object
         Log log = new Log(null, this.sIpAdres, sText);
 
-        // Posting the log
         post(log);
     }
 
@@ -161,6 +126,7 @@ public class LogController extends ApiRequest implements Runnable {
         try {
             // Setting to URL to post to
             URL apiLink = new URL(this.baseURL + "&action=getLast&boebot=" + this.sIpAdres);
+
             // Opening the file
             URLConnection apiConnection = apiLink.openConnection();
             // Reading the file

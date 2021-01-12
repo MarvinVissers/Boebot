@@ -25,7 +25,6 @@ public class BoeBotController {
     }
 
     public ArrayList<Node> Astar(ArrayList<int[]> obstacleCoordinates, Node gridSize, SFNodes sfNodes) {
-        System.out.println(sfNodes);
         ArrayList<Node> Cordinaten = new ArrayList<>();
         // System.out.println(Arrays.deepToString(obstacleCoordinates.toArray()));
         Node initialNode = new Node(sfNodes.getStartNodes(),sfNodes.getStartColumn());
