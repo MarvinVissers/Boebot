@@ -25,6 +25,7 @@ public class BoeBotController {
     }
 
     public ArrayList<Node> Astar(ArrayList<int[]> obstacleCoordinates, Node gridSize, SFNodes sfNodes) {
+        System.out.println(sfNodes);
         ArrayList<Node> Cordinaten = new ArrayList<>();
         // System.out.println(Arrays.deepToString(obstacleCoordinates.toArray()));
         Node initialNode = new Node(sfNodes.getStartNodes(),sfNodes.getStartColumn());
@@ -41,27 +42,21 @@ public class BoeBotController {
         return Cordinaten;
     }
     
-    public void KnipperLinks(int iLoops){
-        controlLed(14, 200, iLoops);
+    public void KnipperLinks(boolean state){
+        controlLed(14, state);
     }
 
-    public void KnipperRechts(int iLoops){
-        controlLed(2, 200, iLoops);
+    public void KnipperRechts(boolean state){
+        controlLed(2,  state);
     }
 
     /**
      * Hee Rick Marvin hier met een super onnodige functie die misschien wel handig is
      * @param iLed de led die aan en uit moet
-     * @param iWait de wachttijd tussen het knipperen
-     * @param iLoops hoevaak de loop wordt uitgevoerd
+     * @param state the state of the led
      */
-    private void controlLed(int iLed, int iWait, int iLoops) {
-       for (int i = 0; i < iLoops; i++) {
-           BoeBot.digitalWrite(iLed, true);
-           BoeBot.wait(iWait);
-           BoeBot.digitalWrite(iLed, false);
-           BoeBot.wait(iWait);
-       }
+    private void controlLed(int iLed, boolean state) {
+       BoeBot.digitalWrite(iLed, state);
     }
 
     /**
@@ -72,9 +67,14 @@ public class BoeBotController {
         int iWait = 500;
 
         // The lights
-        KnipperLinks(5);
+        KnipperLinks(true);
         BoeBot.wait(iWait);
-        KnipperRechts(5);
+        KnipperLinks(false);
+        BoeBot.wait(iWait);
+
+        KnipperRechts(true);
+        BoeBot.wait(iWait);
+        KnipperRechts(false);
         BoeBot.wait(iWait);
 
         // Driving

@@ -19,9 +19,25 @@ import java.net.URLConnection;
  * @author Marvin Vissers
  */
 
-public class RouteController {
+public class RouteController implements Runnable {
 
     public RouteController () {
+
+    }
+
+    /**
+     * When an object implementing interface <code>Runnable</code> is used
+     * to create a thread, starting the thread causes the object's
+     * <code>run</code> method to be called in that separately executing
+     * thread.
+     * <p>
+     * The general contract of the method <code>run</code> is that it may
+     * take any action whatsoever.
+     *
+     * @see Thread#run()
+     */
+    @Override
+    public void run() {
 
     }
 
@@ -177,7 +193,7 @@ public class RouteController {
             }
         } catch (Exception e) {
             // Printing the error
-            System.out.println(e);
+            e.printStackTrace();
         }
 
         // Returning nothing
@@ -220,7 +236,7 @@ public class RouteController {
             }
         } catch (Exception e) {
             // Printing the error
-            System.out.println(e);
+            e.printStackTrace();
         }
 
         // Returning nothing

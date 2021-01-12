@@ -1,6 +1,7 @@
 package Controller;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
@@ -15,7 +16,9 @@ import json.*;
  * @author Marvin Vissers
  */
 
-public class LogController extends ApiRequest {
+public class LogController extends ApiRequest implements Runnable {
+    private volatile String sLogAction = "none";
+
     /**
      * Constructor for the Controller.ApiRequest
      *
@@ -23,6 +26,40 @@ public class LogController extends ApiRequest {
      */
     public LogController(String sMap) throws UnknownHostException {
         super(sMap);
+    }
+
+    /**
+     * When an object implementing interface <code>Runnable</code> is used
+     * to create a thread, starting the thread causes the object's
+     * <code>run</code> method to be called in that separately executing
+     * thread.
+     * <p>
+     * The general contract of the method <code>run</code> is that it may
+     * take any action whatsoever.
+     *
+     * @see Thread#run()
+     */
+    @Override
+    public void run() {
+        try {
+            // Getting the last log
+            String sLogText = getLastLog();
+
+            // Getting its action
+            this.sLogAction = checkLogAction(sLogText);
+
+            // Sleeeping for a bit
+            Thread.sleep(5000);
+            run();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            this.sLogAction = "none";
+        }
+    }
+
+    public String getLogText() {
+        return this.sLogAction;
     }
 
     /**
@@ -65,7 +102,7 @@ public class LogController extends ApiRequest {
             }
         } catch (Exception e) {
             // Printing the error
-            System.out.println(e);
+            e.printStackTrace();
         }
 
         // Returning list with all logs items
@@ -87,13 +124,20 @@ public class LogController extends ApiRequest {
 
         try {
             // Setting to URL to post to
-            URL oracle = new URL(this.baseURL + "&action=post&boebot=" + this.sIpAdres + "&text=" + sText);
-            // Opening the file
-            URLConnection yc = oracle.openConnection();
-            // Reading the file
-            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+            URL apiLink = new URL(this.baseURL + "&action=post&boebot=" + this.sIpAdres + "&text=" + sText);
+
+            new Thread(() -> {
+                try {
+                    // Opening the file
+                    URLConnection conn = apiLink.openConnection();
+                    // Reading the file
+                    new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -133,21 +177,14 @@ public class LogController extends ApiRequest {
                 for (Object o : json) {
                     // Converting the array to an Object
                     JsonObject obj = (JsonObject) o;
-
-                    // Getting the values
-                    int iId = Integer.parseInt(removeQuotes(obj.get("id")));
                     String sText = (removeQuotes(obj.get("text")));
-
-                    // Filling the Log model
-                    Log log = new Log(iId, this.sIpAdres, sText);
-
-                    // Returning the last log
-                    return log.getText();
+                    // Giving back the test
+                    return sText;
                 }
             }
         } catch (Exception e) {
             // Printing the error
-            System.out.println(e);
+            e.printStackTrace();
         }
         // Returning nothing
         return "none";
@@ -184,24 +221,26 @@ public class LogController extends ApiRequest {
      * @return the string with the text
      */
     private String checkTestAction(String sLogText) {
-        // Checking wich test needs to be done
-        if (sLogText.contains("TEST ALL")) {
-            return "testAll";
-        } else if (sLogText.contains("TURN RIGHT")) {
-            return "testTurnRight";
-        } else if (sLogText.contains("TURN LEFT")) {
-            return "testTurnLeft";
-        } else if (sLogText.contains(("DRIVE BACKWARD"))) {
-            return "testDriveBackward";
-        } else if (sLogText.contains("DRIVE FORWARD")) {
-            return "testDriveForward";
-        } else if (sLogText.contains("LIGHT RIGHT")) {
-            return "testLightRight";
-        } else if (sLogText.contains("LIGHT LEFT")) {
-            return  "testLightLeft";
+        try {
+            // Checking wich test needs to be done
+            if (sLogText.contains("TEST ALL")) {
+                return "testAll";
+            } else if (sLogText.contains("TURN RIGHT")) {
+                return "testTurnRight";
+            } else if (sLogText.contains("TURN LEFT")) {
+                return "testTurnLeft";
+            } else if (sLogText.contains(("DRIVE BACKWARD"))) {
+                return "testDriveBackward";
+            } else if (sLogText.contains("DRIVE FORWARD")) {
+                return "testDriveForward";
+            } else if (sLogText.contains("LIGHT RIGHT")) {
+                return "testLightRight";
+            } else {
+                return "testLightLeft";
+            }
+        } catch (Exception e) {
+            // Returning nothing if nothing is found
+            return "none";
         }
-
-        // Returning nothing if nothing is found
-        return "none";
     }
 }

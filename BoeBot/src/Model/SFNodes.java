@@ -47,4 +47,14 @@ public class SFNodes {
     public void setFinishColumn(int finishColumn) {
         FinishColumn = finishColumn;
     }
+
+    @Override
+    public String toString() {
+        return "SFNodes{" +
+                "StartNodes=" + StartNodes +
+                ", StartColumn=" + StartColumn +
+                ", FinishNodes=" + FinishNodes +
+                ", FinishColumn=" + FinishColumn +
+                '}';
+    }
 }
