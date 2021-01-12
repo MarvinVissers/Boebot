@@ -3,10 +3,12 @@ package Controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import Model.Log;
@@ -87,23 +89,19 @@ public class LogController extends ApiRequest {
 
         // Making the text URL safe
         String sText = makeUrlFriendly(log.getText());
+        HttpURLConnection uc = null;
 
         try {
             // Setting to URL to post to
             URL apiLink = new URL(this.baseURL + "&action=post&boebot=" + this.sIpAdres + "&text=" + sText);
-
-            new Thread(() -> {
-                try {
-                    // Opening the file
-                    URLConnection conn = apiLink.openConnection();
-                    // Reading the file
-                    new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+            // Opening the file
+            uc = (HttpURLConnection) apiLink.openConnection();
+            // Reading the file
+            new BufferedReader(new InputStreamReader(uc.getInputStream()));
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            Objects.requireNonNull(uc).disconnect();
         }
     }
 

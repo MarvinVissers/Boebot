@@ -77,48 +77,21 @@ public class BoeBotController {
         BoeBot.wait(iWait);
 
         // Driving
-        toSpeed(50);
+        this.sLinks.update(1500 - 25);
+        this.sRechts.update(1500 + 25);
         BoeBot.wait(iWait);
-        toSpeed(-50);
+        emergencyBrake();
+
+        this.sLinks.update(1500 + 25);
+        this.sRechts.update(1500 - 25);
         BoeBot.wait(iWait);
+        emergencyBrake();
 
         // Turning
         turnDegrees(360, 50);
         BoeBot.wait(iWait);
         turnDegrees(360, -50);
         BoeBot.wait(iWait);
-    }
-
-    /**
-     * Function to test the Boebot driving forward and backward
-     * @param iSpeed the speed to test with
-     */
-    public void toSpeed(int iSpeed) {
-        // Default speed
-        int iDefault = 1500;
-
-        // Checking if the speed is more or less than 0
-        if (iSpeed > 0) {
-            // Speeding up the boebot forwards
-            for (int i = 0; i < iSpeed; i++) {
-                // Setting the new speed
-                this.sLinks.update(iDefault - i);
-                this.sRechts.update(iDefault + i);
-                BoeBot.wait(20);
-            }
-            // Activating the emergency brakes
-            emergencyBrake();
-        } else if (iSpeed < 0) {
-            // Speeding up the boebot backwards
-            for (int i = 0; i > iSpeed; i--) {
-                // Setting the new speed
-                this.sLinks.update(iDefault - i);
-                this.sRechts.update(iDefault + i);
-                BoeBot.wait(20);
-            }
-            // Activating the emergency brakes
-            emergencyBrake();
-        }
     }
 
     public void turnDegrees(int degrees, int turningSpeed) {

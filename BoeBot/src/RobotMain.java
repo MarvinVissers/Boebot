@@ -65,29 +65,26 @@ public class RobotMain {
         ArrayList<Node> AstarRoute = boebotCtrl.Astar(obstacleCoordinates,routeCtrl.getGridSize(), routeCtrl.GetSFNodes());
         Route route = routeCtrl.DriveRoute(new Route(AstarRoute, new Node(0, 0), "Right", 0, 0));
 
-        sLinks.update(iNormalSpeed + iRaceSpeed);
-        sRechts.update(iNormalSpeed - iRaceSpeed);
+        sLinks.update(iNormalSpeed - iRaceSpeed);
+        sRechts.update(iNormalSpeed + iRaceSpeed);
 
         while (true) {
-
-
-            /**
-             * Checking the action that the boebot should be doing
-             * After that is a switch statement with the action
-             */
-
             // Checking if the Boebot is busy
             if (bBusy) {
                 if (sAction.toUpperCase().contains("TEST")) {
                     // Test all test functions
-                    // Posting to the log to start the test
-                    logCtrl.postLog("Attempting to test all");
+                    CompletableFuture.runAsync(() -> {
+                        // Posting to the log to start the test
+                        logCtrl.postLog("Attempting to test all");
+                    });
 
                     // Executing the test
                     boebotCtrl.testAll();
 
-                    // Posting the the log that the test is done
-                    logCtrl.postLog("Succeeded");
+                    CompletableFuture.runAsync(() -> {
+                        // Posting the the log that the test is done
+                        logCtrl.postLog("Succeeded");
+                    });
 
                     // Setting the boebot open for new actions
                     bBusy = false;
@@ -108,33 +105,18 @@ public class RobotMain {
                         // Playing some sound
                         BoeBot.freqOut(0,1500,1000);
 
-                        try {
-                            // Getting the coordinates for the log
-                            Node newCoordinates = route.getListCoordinates().get(route.getOffset());
-
-                            // Sending it to the log
-                            logCtrl.postLog("Found a crossroad. Drive from (" + route.getLastCoordinates().getRow() + "," + route.getLastCoordinates().getCol() + ") to (" + newCoordinates.getRow() + "," + newCoordinates.getCol() + ")");
-                        } catch (Exception e) {
-                            System.out.println("Offset te groot");
-                            logCtrl.postLog("Route completed");
-                            bBusy = false;
-                            sAction = "none";
-
-                            boebotCtrl.emergencyBrake();
-                        }
-
                         switch (route.getDirection()) {
                             case "Right":
                                 if (!routeCtrl.switchDirection(sDirection, route.getDirection())) {
+                                    boebotCtrl.emergencyBrake();
+
                                     switch (sDirection) {
                                         case "Up":
-                                            boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperLinks(true);
                                             boebotCtrl.turnDegrees(90, -25);
 
                                             break;
                                         case "Down":
-                                            boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperRechts(true);
                                             boebotCtrl.turnDegrees(90, 25);
                                             break;
@@ -143,14 +125,14 @@ public class RobotMain {
                                 break;
                             case "Left":
                                 if (!routeCtrl.switchDirection(sDirection, route.getDirection())) {
+                                    boebotCtrl.emergencyBrake();
+
                                     switch (sDirection) {
                                         case "Up":
-                                            boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperRechts(true);
                                             boebotCtrl.turnDegrees(90, 25);
                                             break;
                                         case "Down":
-                                            boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperLinks(true);
                                             boebotCtrl.turnDegrees(90, -25);
                                             break;
@@ -159,14 +141,14 @@ public class RobotMain {
                                 break;
                             case "Up":
                                 if (!routeCtrl.switchDirection(sDirection, route.getDirection())) {
+                                    boebotCtrl.emergencyBrake();
+
                                     switch (sDirection) {
                                         case "Right":
-                                            boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperLinks(true);
                                             boebotCtrl.turnDegrees(90, -25);
                                             break;
                                         case "Left":
-                                            boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperRechts(true);
                                             boebotCtrl.turnDegrees(90, 25);
                                             break;
@@ -175,14 +157,14 @@ public class RobotMain {
                                 break;
                             case "Down":
                                 if (!routeCtrl.switchDirection(sDirection, route.getDirection())) {
+                                    boebotCtrl.emergencyBrake();
+
                                     switch (sDirection) {
                                         case "Right":
-                                            boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperLinks(true);
                                             boebotCtrl.turnDegrees(90, 25);
                                             break;
                                         case "Left":
-                                            boebotCtrl.emergencyBrake();
                                             boebotCtrl.KnipperRechts(true);
                                             boebotCtrl.turnDegrees(90, -25);
                                             break;
@@ -194,8 +176,27 @@ public class RobotMain {
                         // Updating the direction
                         sDirection = route.getDirection();
 
+                        try {
+                            // Getting the coordinates for the log
+                            Node newCoordinates = route.getListCoordinates().get(route.getOffset());
+
+                            Route finalRoute = route;
+//                            CompletableFuture.runAsync(() -> {
+//                                // Sending it to the log
+//                                logCtrl.postLog("Found a crossroad. Drive from (" + finalRoute.getLastCoordinates().getRow() + "," + finalRoute.getLastCoordinates().getCol() + ") to (" + newCoordinates.getRow() + "," + newCoordinates.getCol() + ")");
+//                            });
+                        } catch (Exception e) {
+                            System.out.println("Offset te groot");
+                            logCtrl.postLog("Route completed");
+                            bBusy = false;
+                            sAction = "none";
+
+                            boebotCtrl.emergencyBrake();
+                        }
+
                         // Checking if the route has been completed
                         if (route.getResult() == 1) {
+                            boebotCtrl.emergencyBrake();
                             logCtrl.postLog("Route completed");
                             bBusy = false;
                             sAction = "none";
