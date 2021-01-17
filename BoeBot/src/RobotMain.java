@@ -9,6 +9,8 @@ import Model.Route;
 import TI.BoeBot;
 import TI.Servo;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
@@ -88,134 +90,6 @@ public class RobotMain {
 
                     // Setting the boebot open for new actions
                     bBusy = false;
-                }
-
-                if (sAction.contains("route")) {
-                    /**
-                     * Drive route logic
-                     */
-
-                    // Reading out the line followers
-                    int iSensorLeft = BoeBot.analogRead(analogPin1);
-                    int iSensorMiddle = BoeBot.analogRead(analogPin2);
-                    int iSensorRight = BoeBot.analogRead(analogPin3);
-
-                    // Checking if all 3 line followers see black wich means crossroad and the route is not yet completed
-                    if ((iSensorLeft >= iSensitivity) && (iSensorMiddle >= iSensitivity) && (iSensorRight >= iSensitivity) && route.getResult() == 0) {
-                        // Playing some sound
-                        BoeBot.freqOut(0,1500,1000);
-
-                        switch (route.getDirection()) {
-                            case "Right":
-                                if (!routeCtrl.switchDirection(sDirection, route.getDirection())) {
-                                    boebotCtrl.emergencyBrake();
-
-                                    switch (sDirection) {
-                                        case "Up":
-                                            boebotCtrl.KnipperLinks(true);
-                                            boebotCtrl.turnDegrees(90, -25);
-
-                                            break;
-                                        case "Down":
-                                            boebotCtrl.KnipperRechts(true);
-                                            boebotCtrl.turnDegrees(90, 25);
-                                            break;
-                                    }
-                                }
-                                break;
-                            case "Left":
-                                if (!routeCtrl.switchDirection(sDirection, route.getDirection())) {
-                                    boebotCtrl.emergencyBrake();
-
-                                    switch (sDirection) {
-                                        case "Up":
-                                            boebotCtrl.KnipperRechts(true);
-                                            boebotCtrl.turnDegrees(90, 25);
-                                            break;
-                                        case "Down":
-                                            boebotCtrl.KnipperLinks(true);
-                                            boebotCtrl.turnDegrees(90, -25);
-                                            break;
-                                    }
-                                }
-                                break;
-                            case "Up":
-                                if (!routeCtrl.switchDirection(sDirection, route.getDirection())) {
-                                    boebotCtrl.emergencyBrake();
-
-                                    switch (sDirection) {
-                                        case "Right":
-                                            boebotCtrl.KnipperLinks(true);
-                                            boebotCtrl.turnDegrees(90, -25);
-                                            break;
-                                        case "Left":
-                                            boebotCtrl.KnipperRechts(true);
-                                            boebotCtrl.turnDegrees(90, 25);
-                                            break;
-                                    }
-                                }
-                                break;
-                            case "Down":
-                                if (!routeCtrl.switchDirection(sDirection, route.getDirection())) {
-                                    boebotCtrl.emergencyBrake();
-
-                                    switch (sDirection) {
-                                        case "Right":
-                                            boebotCtrl.KnipperLinks(true);
-                                            boebotCtrl.turnDegrees(90, 25);
-                                            break;
-                                        case "Left":
-                                            boebotCtrl.KnipperRechts(true);
-                                            boebotCtrl.turnDegrees(90, -25);
-                                            break;
-                                    }
-                                }
-                                break;
-                        }
-
-                        // Updating the direction
-                        sDirection = route.getDirection();
-
-                        try {
-                            // Getting the coordinates for the log
-                            Node newCoordinates = route.getListCoordinates().get(route.getOffset());
-
-                            Route finalRoute = route;
-//                            CompletableFuture.runAsync(() -> {
-//                                // Sending it to the log
-//                                logCtrl.postLog("Found a crossroad. Drive from (" + finalRoute.getLastCoordinates().getRow() + "," + finalRoute.getLastCoordinates().getCol() + ") to (" + newCoordinates.getRow() + "," + newCoordinates.getCol() + ")");
-//                            });
-                        } catch (Exception e) {
-                            System.out.println("Offset te groot");
-                            logCtrl.postLog("Route completed");
-                            bBusy = false;
-                            sAction = "none";
-
-                            boebotCtrl.emergencyBrake();
-                        }
-
-                        // Checking if the route has been completed
-                        if (route.getResult() == 1) {
-                            boebotCtrl.emergencyBrake();
-                            logCtrl.postLog("Route completed");
-                            bBusy = false;
-                            sAction = "none";
-                        } else {
-                            // Bringing the boebot back to speed
-                            sLinks.update(iNormalSpeed - iRaceSpeed);
-                            sRechts.update(iNormalSpeed + iRaceSpeed);
-                            route = routeCtrl.DriveRoute(route);
-                        }
-                    } else if (((iSensorLeft >= iSensitivity) && (iSensorMiddle <= iSensitivity) && (iSensorRight <= iSensitivity)) || ((iSensorLeft >= iSensitivity) && (iSensorMiddle >= iSensitivity) && (iSensorRight <= iSensitivity)) && route.getResult() == 0) {
-                        sLinks.update(iNormalSpeed);
-                        sRechts.update(iNormalSpeed + iRaceSpeed);
-                    } else if (((iSensorLeft <= iSensitivity) && (iSensorMiddle <= iSensitivity) && (iSensorRight >= iSensitivity)) || ((iSensorLeft <= iSensitivity) && (iSensorMiddle >= iSensitivity) && (iSensorRight >= iSensitivity)) && route.getResult() == 0) {
-                        sLinks.update(iNormalSpeed - iRaceSpeed);
-                        sRechts.update(iNormalSpeed);
-                    } else if ((iSensorLeft <= iSensitivity) && (iSensorMiddle >= iSensitivity) && (iSensorRight <= iSensitivity) && route.getResult() == 0) {
-                        sLinks.update(iNormalSpeed - iRaceSpeed);
-                        sRechts.update(iNormalSpeed + iRaceSpeed);
-                    }
                 }
             } else {
                 BoeBot.wait(5000);
