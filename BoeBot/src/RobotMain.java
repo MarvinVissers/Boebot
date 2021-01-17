@@ -181,10 +181,10 @@ public class RobotMain {
                             Node newCoordinates = route.getListCoordinates().get(route.getOffset());
 
                             Route finalRoute = route;
-//                            CompletableFuture.runAsync(() -> {
-//                                // Sending it to the log
-//                                logCtrl.postLog("Found a crossroad. Drive from (" + finalRoute.getLastCoordinates().getRow() + "," + finalRoute.getLastCoordinates().getCol() + ") to (" + newCoordinates.getRow() + "," + newCoordinates.getCol() + ")");
-//                            });
+                           CompletableFuture.runAsync(() -> {
+                               // Sending it to the log
+                               logCtrl.postLog("Found a crossroad. Drive from (" + finalRoute.getLastCoordinates().getRow() + "," + finalRoute.getLastCoordinates().getCol() + ") to (" + newCoordinates.getRow() + "," + newCoordinates.getCol() + ")");
+                           });
                         } catch (Exception e) {
                             System.out.println("Offset te groot");
                             logCtrl.postLog("Route completed");
